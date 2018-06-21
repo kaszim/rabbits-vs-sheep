@@ -1,0 +1,21 @@
+package Team
+import Config
+
+public enum Team
+    RABBITS
+    SHEEP
+
+public function Team.oppositeTeam() returns Team
+    if this == Team.RABBITS
+        return Team.SHEEP
+    return Team.RABBITS
+
+public function Team.creepController() returns player 
+    if this == Team.RABBITS
+        return RABBITS_PLAYER
+    return SHEEP_PLAYER
+
+public function Team.rect() returns rect 
+    if this == Team.RABBITS
+        return RECT_RABBITS
+    return RECT_SHEEP

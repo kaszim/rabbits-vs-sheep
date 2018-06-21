@@ -1,0 +1,22 @@
+package Creeps
+import LinkedList
+import Creep
+import Team
+import Event
+
+public class Creeps
+    //private LinkedList<Creep> creeps
+
+    construct()
+        //creeps = new LinkedList<Creep>()
+        skip
+
+    function addCreep(Team t)
+        var creep = new Creep(t.oppositeTeam().rect().getCenter(), t)
+        //this.creeps.add(creep)
+        EventListener.add(creep.actor, EVENT_PLAYER_UNIT_DEATH) ->
+            onCreepDeath(creep)
+    
+    function onCreepDeath(Creep creep)
+        addCreep(creep.getTeam().oppositeTeam())
+        addCreep(creep.getTeam().oppositeTeam())

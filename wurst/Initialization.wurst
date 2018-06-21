@@ -1,0 +1,20 @@
+package Initialization
+import EntityManagement
+import ClosureTimers
+import Creeps
+import Team
+
+Creeps creeps
+
+init
+	startEntityLoop()
+	FogMaskEnable(false)
+	FogEnable(false)
+	SetCameraField(CAMERA_FIELD_TARGET_DISTANCE, 2400, 0.00)
+	SetCameraField(CAMERA_FIELD_FARZ, 100000000.00, 0)
+	creeps = new Creeps()
+	doAfter(0.1) ->
+		createUnit(Player(0), 'Nalc', Team.RABBITS.rect().getCenter(), angle(0))
+		createUnit(Player(6), 'Nalc', Team.SHEEP.rect().getCenter(), angle(0))
+		creeps.addCreep(Team.SHEEP)
+		//SetCameraBoundsToRect(Rect( -1200.0, -2300.0, 5000.0, -200.0 ))

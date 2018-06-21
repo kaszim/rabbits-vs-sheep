@@ -1,0 +1,52 @@
+package Creep
+import ObjectIdGenerator
+import UnitObjEditing
+import EntityManagement
+import Team
+
+constant RABBIT = compiletime(UNIT_ID_GEN.next())
+constant SHEEP = compiletime(UNIT_ID_GEN.next())
+
+@compiletime function createRabbit()
+	new UnitDefinition(RABBIT, 'necr')
+	..setName("Amazing Rabbit")
+	..setCreepFeatures()
+
+@compiletime function createSheep()
+	new UnitDefinition(SHEEP, 'nshe')
+	..setName("Amazing Sheep")
+	..setCreepFeatures()
+
+@compiltime function UnitDefinition.setCreepFeatures()
+	this
+	..setHitPointsMaximumBase(100)
+	..setDeathType(3) // Can Raise, Does Decay
+	..setDefenseBase(2)
+	..setNormalAbilities("")
+	..setAttack1CooldownTime(1.35)
+	..setAttack1DamageBase(11)
+	..setAttack1DamageNumberofDice(1)
+	..setAttack1DamageSidesperDie(2)
+	..setAttack1Range(90)
+	..setAttack1RangeMotionBuffer(250.0)
+	..setAttack1TargetsAllowed("Ground")
+	..setAttack1WeaponType(WeaponType.Normal)
+	..setAttacksEnabled(1)
+
+function getCreep(Team t) returns int
+	if t == Team.RABBITS
+		return RABBIT
+	return SHEEP
+
+public class Creep extends UnitEntity
+	private Team team
+
+	construct(vec2 pos, Team t)
+		super(createUnit(t.creepController(), getCreep(t), pos, angle(0)))
+		team = t
+
+	ondestroy
+		print("Destroyed")
+
+	function getTeam() returns Team
+		return team
