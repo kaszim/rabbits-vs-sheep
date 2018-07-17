@@ -1,0 +1,15 @@
+package GoblinMerchant
+
+import ObjectIdGenerator
+import UnitObjEditing
+import EntityManagement
+
+constant BUILDING_ID = compiletime(UNIT_ID_GEN.next())
+
+@compiletime function createBuilding()
+    new BuildingDefinition(BUILDING_ID, 'ngme')
+
+public class GoblinMerchant extends UnitEntity
+
+    construct(player p, vec2 pos)
+        super(createUnit(p, BUILDING_ID, pos, (270).fromDeg()))
