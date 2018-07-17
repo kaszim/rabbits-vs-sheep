@@ -17,13 +17,13 @@ public function initializeTeams()
     teamPlayers.put(Team.SHEEP, new HashSet<player>())
     for i = 0 to PLAYERS_PER_TEAM-1
         var p = Player(i)
-        if p.isIngame()
+        if p.isIngame() or p.getController() == MAP_CONTROL_COMPUTER
             teamPlayers.get(Team.RABBITS).add(p)
         skip // Counteract compiler bug
     
     for i = 6 to PLAYERS_PER_TEAM*2
         var p = Player(i)
-        if p.isIngame()
+        if p.isIngame() or p.getController() == MAP_CONTROL_COMPUTER
             teamPlayers.get(Team.SHEEP).add(p)
         skip // Counteract compiler bug
 
