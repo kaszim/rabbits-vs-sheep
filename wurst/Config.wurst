@@ -3,5 +3,5 @@ package Config
 public constant RABBITS_PLAYER = Player(5)
 public constant SHEEP_PLAYER = Player(11)
 
-public constant RECT_RABBITS = Rect(-1536.0, 0.0, 1022.0, -3198.0)
-public constant RECT_SHEEP = Rect(3068.0, 0.0, 5632.0, -3198.0)
+public constant RECT_RABBITS = Rect(-1408.0, -128.0, 1024.0, -3200.0)
+public constant RECT_SHEEP = Rect(3068.0, 0.0, 5632.0, -3200.0)
