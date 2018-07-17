@@ -15,7 +15,11 @@ init
 	SetCameraField(CAMERA_FIELD_FARZ, 100000000.00, 0)
 	creeps = new Creeps()
 	doAfter(0.1) ->
-		new HerO(Team.RABBITS.rect().getCenter(), Player(0))
+		initializeTeams()
+		for p in Team.RABBITS.getPlayers()
+			new HerO(Team.RABBITS.rect().getCenter(), p)
+			skip
+		skip
 		//createUnit(Player(0), 'Nalc', Team.RABBITS.rect().getCenter(), angle(0))
 		//createUnit(Player(6), 'Nalc', Team.SHEEP.rect().getCenter(), angle(0))
 		//creeps.addCreep(Team.SHEEP)

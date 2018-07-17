@@ -1,8 +1,7 @@
 package Creeps
-import LinkedList
 import Creep
 import Team
-import Event
+import ClosureEvents
 
 public class Creeps
     //private LinkedList<Creep> creeps
