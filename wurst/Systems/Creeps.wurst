@@ -19,3 +19,4 @@ public class Creeps
     function onCreepDeath(Creep creep)
         addCreep(creep.getTeam().oppositeTeam())
         addCreep(creep.getTeam().oppositeTeam())
+        destroy creep
