@@ -1,7 +1,6 @@
 package RoundController
-import ClosureTimers
+import GroupUtils
 import Entity
-import GameState
 import HeroSelector
 import Creeps
 import Team
@@ -32,14 +31,14 @@ public class RoundController
         new HeroEntity(Player(6), Team.SHEEP.rect().getCenter(), randomHeroId())
     
     private function clearMap()
-        let g = GetUnitsInRectAll(GetPlayableMapRect())
+        let g = GetUnitsInRectAll(playableMapRect)
         for u in g
             if u.getEntity() != null
                 destroy u.getEntity()
             else
                 u.remove()
         entities.clear()
-        DestroyGroup(g)
+        g.release()
         creeps.clear()
         
     private function spawnBuildings(Team team)
