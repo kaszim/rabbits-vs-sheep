@@ -1,23 +1,38 @@
 package Creeps
+import ClosureTimers
+import FText
 import GameState
 import Creep
 import Team
 import ClosureEvents
 
+
 public class Creeps
+    private int array[2] creepCount
 
     construct()
-        skip
+        creepCount[Team.RABBITS castTo int] = 0 // number of creeps the rabbits own
+        creepCount[Team.SHEEP castTo int] = 0
+        // so text is number of creeps rabbits own => display on sheep side
+        var text = createFText(Team.SHEEP.rect().getCenter().toVec3(), creepCount[Team.RABBITS castTo int].toString(), 14., 0., ZERO2, colorA(240,10,10, 255))
+        var text2 = createFText(Team.RABBITS.rect().getCenter().toVec3(), creepCount[Team.SHEEP castTo int].toString(), 14., 0., ZERO2, colorA(240,10,10, 255))
+        doPeriodically(0.5) cb ->
+            text.tt.setText(creepCount[Team.RABBITS castTo int].toString(), 14.)
+            text2.tt.setText(creepCount[Team.SHEEP castTo int].toString(), 14.)
 
     function add(Team t)
         let creep = new Creep(t.oppositeTeam().rect().getCenter(), t)
         EventListener.add(creep.actor, EVENT_PLAYER_UNIT_DEATH) ->
             onCreepDeath(creep)
+        creepCount[creep.getTeam() castTo int]++
+    
+    function clear()
+        creepCount[Team.RABBITS castTo int] = 0
+        creepCount[Team.SHEEP castTo int] = 0
 
     private function onCreepDeath(Creep creep)
-        print("|c99000099 DEATH")
         if gameState == GameState.PLAYING
-            print("|c99345699 DEATH")
             add(creep.getTeam().oppositeTeam())
             add(creep.getTeam().oppositeTeam())
-            destroy creep
+        creepCount[creep.getTeam() castTo int]--
+        destroy creep
