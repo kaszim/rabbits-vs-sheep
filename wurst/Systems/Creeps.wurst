@@ -1,5 +1,4 @@
 package Creeps
-import HashSet
 import GameState
 import Creep
 import Team
@@ -16,7 +15,7 @@ public class Creeps
             onCreepDeath(creep)
 
     private function onCreepDeath(Creep creep)
-        print("|c99000099 DEATH")        
+        print("|c99000099 DEATH")
         if gameState == GameState.PLAYING
             print("|c99345699 DEATH")
             add(creep.getTeam().oppositeTeam())
