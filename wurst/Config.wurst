@@ -8,4 +8,4 @@ public constant RECT_RABBITS = Rect(-1408.0, -128.0, 1024.0, -3200.0)
 public constant RECT_SHEEP = Rect(3068.0, 0.0, 5632.0, -3200.0)
 
 public constant CREEP_COUNT_TEXT_SIZE = 16.
-public int MAX_CREEP = 10
+public int MAX_CREEP = 300
