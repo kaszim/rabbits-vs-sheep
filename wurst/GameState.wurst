@@ -1,0 +1,9 @@
+package GameState
+
+public GameState gameState
+
+public enum GameState
+    SETTINGS
+    PLAYING
+    INBETWEEN
+    END

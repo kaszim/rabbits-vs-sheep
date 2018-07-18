@@ -1,26 +1,24 @@
 package Initialization
 import EntityManagement
 import ClosureTimers
-import Creeps
+import GameState
+import RoundController
 import Team
-import HerO
 
-Creeps creeps
+RoundController controller
 
 init
-	startEntityLoop()
 	FogMaskEnable(false)
 	FogEnable(false)
 	SetCameraField(CAMERA_FIELD_TARGET_DISTANCE, 2400, 0.00)
 	SetCameraField(CAMERA_FIELD_FARZ, 100000000.00, 0)
-	creeps = new Creeps()
+	gameState = GameState.PLAYING
+	controller = new RoundController()
 	doAfter(0.1) ->
+		startEntityLoop()
 		initializeTeams()
-		for p in Team.RABBITS.getPlayers()
-			new HerO(Team.RABBITS.rect().getCenter(), p)
-		for p in Team.SHEEP.getPlayers()
-			new HerO(Team.SHEEP.rect().getCenter(), p)
+		controller.start()
 		//createUnit(Player(0), 'Nalc', Team.RABBITS.rect().getCenter(), angle(0))
 		//createUnit(Player(6), 'Nalc', Team.SHEEP.rect().getCenter(), angle(0))
-		//creeps.addCreep(Team.SHEEP)
 		//SetCameraBoundsToRect(Rect( -1200.0, -2300.0, 5000.0, -200.0 ))
+

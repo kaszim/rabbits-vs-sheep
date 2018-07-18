@@ -1,15 +1,10 @@
 package HerO
 import ObjectIdGenerator
 import UnitObjEditing
-import EntityManagement
 
-constant HERO_ID = compiletime(HERO_ID_GEN.next())
+public constant HERO_ID = compiletime(HERO_ID_GEN.next())
 
 @compiletime function createHero()
     new HeroDefinition(HERO_ID, 'Nalc')
     ..setName("herO")
 
-public class HerO extends UnitEntity
-
-    construct(vec2 pos, player p)
-        super(createUnit(p, HERO_ID, pos, angle(0)))

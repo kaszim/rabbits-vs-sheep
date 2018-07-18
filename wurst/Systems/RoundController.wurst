@@ -1,0 +1,44 @@
+package RoundController
+import ClosureTimers
+import Entity
+import GameState
+import HeroSelector
+import Creeps
+import Team
+import HeroEntity
+import FountainOfLife
+import FountainOfMana
+import GoblinMerchant
+import MarketPlace
+
+
+public class RoundController
+    private LinkedList<Entity> entities
+    private Creeps creeps
+
+    construct()
+        entities = new LinkedList<Entity>()
+        creeps = new Creeps()
+    
+    function start()
+        spawnBuildings(Team.RABBITS)
+        spawnBuildings(Team.SHEEP)
+        for p in Team.RABBITS.getPlayers()
+            new HeroEntity(p, Team.RABBITS.rect().getCenter(), randomHeroId())
+        for p in Team.SHEEP.getPlayers()
+            new HeroEntity(p, Team.SHEEP.rect().getCenter(), randomHeroId())
+        creeps.add(Team.SHEEP)
+        doAfter(10.0) ->
+            gameState = GameState.INBETWEEN
+            clearMap()
+    
+    private function clearMap()
+        entities.forEach(e -> destroy e)
+        entities.clear()
+    
+    private function spawnBuildings(Team team)
+        entities.add(new FountainOfLife(DUMMY_PLAYER, team.rect().getLeftTop().add(256, -384)))
+        entities.add(new FountainOfMana(DUMMY_PLAYER, team.rect().getRightBot().add(-384, 384)))
+        entities.add(new GoblinMerchant(DUMMY_PLAYER, team.rect().getRightTop().add(-384, -384)))
+        entities.add(new MarketPlace(DUMMY_PLAYER, team.rect().getLeftBot().add(256, 384)))
+        

@@ -1,22 +1,24 @@
 package Creeps
+import HashSet
+import GameState
 import Creep
 import Team
 import ClosureEvents
 
 public class Creeps
-    //private LinkedList<Creep> creeps
 
     construct()
-        //creeps = new LinkedList<Creep>()
         skip
 
-    function addCreep(Team t)
-        var creep = new Creep(t.oppositeTeam().rect().getCenter(), t)
-        //this.creeps.add(creep)
+    function add(Team t)
+        let creep = new Creep(t.oppositeTeam().rect().getCenter(), t)
         EventListener.add(creep.actor, EVENT_PLAYER_UNIT_DEATH) ->
             onCreepDeath(creep)
-    
-    function onCreepDeath(Creep creep)
-        addCreep(creep.getTeam().oppositeTeam())
-        addCreep(creep.getTeam().oppositeTeam())
-        destroy creep
+
+    private function onCreepDeath(Creep creep)
+        print("|c99000099 DEATH")        
+        if gameState == GameState.PLAYING
+            print("|c99345699 DEATH")
+            add(creep.getTeam().oppositeTeam())
+            add(creep.getTeam().oppositeTeam())
+            destroy creep
