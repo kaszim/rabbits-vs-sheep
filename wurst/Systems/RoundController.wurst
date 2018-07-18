@@ -28,11 +28,8 @@ public class RoundController
         for p in Team.SHEEP.getPlayers()
             new HeroEntity(p, Team.SHEEP.rect().getCenter(), randomHeroId())
         creeps.add(Team.SHEEP)
-        doAfter(10.0) ->
-            gameState = GameState.INBETWEEN
-            clearMap()
-            skip // compiler bug :)))
-        skip // compiler bug :)))
+        creeps.add(Team.RABBITS)
+        new HeroEntity(Player(6), Team.SHEEP.rect().getCenter(), randomHeroId())
     
     private function clearMap()
         let g = GetUnitsInRectAll(GetPlayableMapRect())
@@ -43,6 +40,7 @@ public class RoundController
                 u.remove()
         entities.clear()
         DestroyGroup(g)
+        creeps.clear()
         
     private function spawnBuildings(Team team)
         entities.add(new FountainOfLife(DUMMY_PLAYER, team.rect().getLeftTop().add(256, -384)))

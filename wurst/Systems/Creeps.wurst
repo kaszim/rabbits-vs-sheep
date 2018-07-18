@@ -1,6 +1,7 @@
 package Creeps
 import ClosureTimers
 import FText
+import Config
 import GameState
 import Creep
 import Team
@@ -14,11 +15,18 @@ public class Creeps
         creepCount[Team.RABBITS castTo int] = 0 // number of creeps the rabbits own
         creepCount[Team.SHEEP castTo int] = 0
         // so text is number of creeps rabbits own => display on sheep side
-        var text = createFText(Team.SHEEP.rect().getCenter().toVec3(), creepCount[Team.RABBITS castTo int].toString(), 14., 0., ZERO2, colorA(240,10,10, 255))
-        var text2 = createFText(Team.RABBITS.rect().getCenter().toVec3(), creepCount[Team.SHEEP castTo int].toString(), 14., 0., ZERO2, colorA(240,10,10, 255))
-        doPeriodically(0.5) cb ->
-            text.tt.setText(creepCount[Team.RABBITS castTo int].toString(), 14.)
-            text2.tt.setText(creepCount[Team.SHEEP castTo int].toString(), 14.)
+        var text = createFText(Team.SHEEP.rect().getCenter().toVec3(), "0", CREEP_COUNT_TEXT_SIZE, 0., ZERO2, colorA(0, 255, 0, 255))
+        var text2 = createFText(Team.RABBITS.rect().getCenter().toVec3(), "0", CREEP_COUNT_TEXT_SIZE, 0., ZERO2, colorA(0, 255, 0, 255))
+        doPeriodically(0.1) cb ->
+            let rabbits = creepCount[Team.RABBITS castTo int]
+            let sheep = creepCount[Team.SHEEP castTo int]
+            let k = 255/MAX_CREEP
+            text.tt
+            ..setText(rabbits.toString(), CREEP_COUNT_TEXT_SIZE)
+            ..setColor((rabbits*k).toInt(), 255-(rabbits*k).toInt(), 0, 255)
+            text2.tt
+            ..setText(sheep.toString(), CREEP_COUNT_TEXT_SIZE)
+            ..setColor((sheep*k).toInt(), 255-(sheep*k).toInt(), 0, 255)
 
     function add(Team t)
         let creep = new Creep(t.oppositeTeam().rect().getCenter(), t)
