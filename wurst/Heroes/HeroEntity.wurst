@@ -8,4 +8,4 @@ public class HeroEntity extends UnitEntity
         sleeps = false
 
     ondestroy
-        print("Hero Destroyed")
+        skip

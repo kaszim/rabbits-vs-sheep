@@ -57,7 +57,6 @@ public class Creep extends UnitEntity
 	ondestroy
 		flashEffect(Objects.humanLargeDeathExplode, this.pos)
 		deathSound.playOnPoint(this.pos)
-		print("Destroyed")
 
 	function getTeam() returns Team
 		return team
