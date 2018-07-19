@@ -49,8 +49,8 @@ public class Game
         let d = t.createTimerDialog()
         d.setTitle("Round starts in")
         d.display(true)
-        t.start(15, () -> skip)
-        doAfter(15.) ->
+        t.start(ROUND_PREPERATION_TIME, () -> skip)
+        doAfter(ROUND_PREPERATION_TIME) ->
             DestroyTimerDialog(d)
             t.release()
             creeps.add(Team.RABBITS, Team.SHEEP.rect().getCenter())
