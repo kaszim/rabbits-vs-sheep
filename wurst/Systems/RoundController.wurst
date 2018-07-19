@@ -12,6 +12,7 @@ import Config
 import ClosureTimers
 import ClosureForGroups
 import GameState
+import TimerDialog
 
 
 public class RoundController
@@ -35,14 +36,22 @@ public class RoundController
             spawnHero(p, Team.RABBITS, randomHeroId())
         for p in Team.SHEEP.getPlayers()
             spawnHero(p, Team.SHEEP, randomHeroId())
-        creeps.add(Team.SHEEP)
-        creeps.add(Team.RABBITS)
         spawnHero(Player(6), Team.SHEEP, randomHeroId())
         doPeriodically(0.1) cb ->
             if gameState != GameState.PLAYING
                 destroy cb
             else
                 checkWinCondition()
+        let t = CreateTimer()
+        let d = t.createTimerDialog()
+        d.setTitle("Round starts in")
+        d.display(true)
+        t.start(15, () -> skip)
+        doAfter(15.) ->
+            DestroyTimerDialog(d)
+            t.release()
+            creeps.add(Team.RABBITS)
+            creeps.add(Team.SHEEP)
     
     private function checkWinCondition()
         if creeps.getCreepCount(Team.RABBITS) > MAX_CREEP
