@@ -3,7 +3,7 @@ import ObjectIdGenerator
 import UnitObjEditing
 import EntityManagement
 import Team
-import Effect
+import SoundUtils
 import Assets
 
 constant RABBIT = compiletime(UNIT_ID_GEN.next())
@@ -41,14 +41,17 @@ function getCreep(Team t) returns int
 	return SHEEP
 
 public class Creep extends UnitEntity
+	private static SoundDefinition deathSound = new SoundDefinition(Sounds.artilleryCorpseExplodeDeath1, false)
 	private Team team
 
 	construct(vec2 pos, Team t)
 		super(createUnit(t.creepController(), getCreep(t), pos, angle(0)))
+		sleeps = false
 		team = t
 
 	ondestroy
 		flashEffect(Objects.humanLargeDeathExplode, this.pos)
+		deathSound.playOnPoint(this.pos)
 		print("Destroyed")
 
 	function getTeam() returns Team
