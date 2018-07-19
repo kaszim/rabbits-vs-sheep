@@ -50,8 +50,8 @@ public class RoundController
         doAfter(15.) ->
             DestroyTimerDialog(d)
             t.release()
-            creeps.add(Team.RABBITS)
-            creeps.add(Team.SHEEP)
+            creeps.add(Team.RABBITS, Team.SHEEP.rect().getCenter())
+            creeps.add(Team.SHEEP, Team.RABBITS.rect().getCenter())
     
     private function checkWinCondition()
         if creeps.getCreepCount(Team.RABBITS) > MAX_CREEP

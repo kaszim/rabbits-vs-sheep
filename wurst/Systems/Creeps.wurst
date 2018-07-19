@@ -32,7 +32,10 @@ public class Creeps
         return creepCount[t.toInt()]
 
     function add(Team t)
-        let creep = new Creep(t.oppositeTeam().rect().getCenter(), t)
+        add(t, t.oppositeTeam().rect().randomPoint())
+    
+    function add(Team t, vec2 pos)
+        let creep = new Creep(pos, t)
         EventListener.add(creep.actor, EVENT_PLAYER_UNIT_DEATH) ->
             onCreepDeath(creep)
         creepCount[creep.getTeam().toInt()]++
