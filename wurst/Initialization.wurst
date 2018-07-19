@@ -26,7 +26,9 @@ init
 		sb = new Scoreboard(Team.RABBITS.getPlayers().size(), Team.SHEEP.getPlayers().size(), 1)
 		sb.setTeamRow(0, Team.RABBITS.toString(), Icons.bTNCritterRabbit)
 		sb.setTeamRow(1, Team.SHEEP.toString(), Icons.bTNSheep)
-		game.start()
-		sb.setHeroes(0, game.getHeroes(Team.RABBITS))
+		game.registerOnRoundPrepare() ->
+			sb.setHeroes(Team.RABBITS.toInt(), game.getHeroes(Team.RABBITS))
+			sb.setHeroes(Team.SHEEP.toInt(), game.getHeroes(Team.SHEEP))
 		sb.display()
+		game.start()
 
