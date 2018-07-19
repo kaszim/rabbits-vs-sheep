@@ -39,6 +39,9 @@ constant SHEEP = compiletime(UNIT_ID_GEN.next())
 	..setGoldBountyAwardedBase(90)
 	..setGoldBountyAwardedNumberofDice(6)
 	..setGoldBountyAwardedSidesperDie(6)
+	..setSpeedBase(100)
+	..setSpeedMaximum(100)
+	..setSpeedMinimum(100)
 
 function getCreep(Team t) returns int
 	if t == Team.RABBITS
