@@ -1,5 +1,4 @@
 package RoundController
-import GroupUtils
 import Entity
 import HeroSelector
 import Creeps
@@ -19,14 +18,17 @@ public class RoundController
     private LinkedList<Entity> entities
     private LinkedList<Entity> array[2] heroes
     private Creeps creeps
+    private int roundsPlayed
 
     construct()
         entities = new LinkedList<Entity>()
         creeps = new Creeps()
         heroes[0] = new LinkedList<Entity>()
         heroes[1] = new LinkedList<Entity>()
+        roundsPlayed = 0
     
     function start()
+        gameState = GameState.PLAYING
         spawnBuildings(Team.RABBITS)
         spawnBuildings(Team.SHEEP)
         for p in Team.RABBITS.getPlayers()
@@ -50,11 +52,26 @@ public class RoundController
         else if heroes[Team.RABBITS.toInt()].size() <= 0
             teamWin(Team.SHEEP) 
         else if heroes[Team.SHEEP.toInt()].size() <= 0
-            teamWin(Team.RABBITS) 
+            teamWin(Team.RABBITS)
+    
+    private function gameEnd(Team t)
+        print(t.toInt().toString() + "won")
+        gameState = GameState.END
+        t.victory()
+        t.oppositeTeam().defeat()
     
     private function teamWin(Team t)
         print("Won: " + (t.toInt()).toString())
+        roundsPlayed++
+        t.addWin()
+
+        if t.getWins() >= WINS_NEEDED
+            gameEnd(t)
+            return
+
         gameState = GameState.INBETWEEN
+        clearMap()
+        doAfter(2, () -> start())
     
     private function spawnHero(player p, Team t, int id) returns Entity
         let hero = new HeroEntity(p, t.rect().getCenter(), id)

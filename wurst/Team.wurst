@@ -2,12 +2,15 @@ package Team
 import Config
 import HashMap
 import HashSet
+import DialogBox
 
 public enum Team
     RABBITS
     SHEEP
 
 HashMap<Team, HashSet<player>> teamPlayers
+
+int array wins = [0, 0]
 
 public function initializeTeams()
     teamPlayers = new HashMap<Team, HashSet<player>>()
@@ -28,6 +31,22 @@ public function player.getTeam() returns Team
         return Team.RABBITS
     else
         return Team.SHEEP
+
+public function Team.victory()
+    for p in this.getPlayers()
+        CustomVictoryBJ(p, true, true)
+
+public function Team.defeat()
+    for p in this.getPlayers()
+        var d = new DialogBox("Defeat!")
+        d.addQuitButton(true, "Continue")
+        d.display(p, true)
+
+public function Team.addWin()
+    wins[this.toInt()]++
+    
+public function Team.getWins() returns int
+    return wins[this.toInt()]
 
 public function Team.getPlayers() returns HashSet<player>
     return teamPlayers.get(this)

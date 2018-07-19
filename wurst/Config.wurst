@@ -9,4 +9,5 @@ public constant RECT_SHEEP = Rect(3068.0, 0.0, 5632.0, -3200.0)
 
 public constant CREEP_COUNT_TEXT_SIZE = 16.
 public int MAX_CREEP = 300
+public int WINS_NEEDED = 5
 public constant BUILDING_OFFSETS = [vec2(256, -384), vec2(-384, 384), vec2(-384, -384), vec2(256, 384)]

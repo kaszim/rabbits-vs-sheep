@@ -12,7 +12,7 @@ init
 	FogEnable(false)
 	SetCameraField(CAMERA_FIELD_TARGET_DISTANCE, 2400, 0.00)
 	SetCameraField(CAMERA_FIELD_FARZ, 100000000.00, 0)
-	gameState = GameState.PLAYING
+	gameState = GameState.SETTINGS
 	controller = new RoundController()
 	startEntityLoop()
 	doAfter(1) ->
