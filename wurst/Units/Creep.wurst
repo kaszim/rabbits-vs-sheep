@@ -34,6 +34,11 @@ constant SHEEP = compiletime(UNIT_ID_GEN.next())
 	..setAttack1TargetsAllowed("Ground")
 	..setAttack1WeaponType(WeaponType.Normal)
 	..setAttacksEnabled(1)
+	..setAcquisitionRange(3000.)
+	..setLevel(2)
+	..setGoldBountyAwardedBase(90)
+	..setGoldBountyAwardedNumberofDice(6)
+	..setGoldBountyAwardedSidesperDie(6)
 
 function getCreep(Team t) returns int
 	if t == Team.RABBITS

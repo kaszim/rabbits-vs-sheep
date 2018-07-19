@@ -4,6 +4,7 @@ import ClosureTimers
 import GameState
 import RoundController
 import Team
+import Config
 
 RoundController controller
 
@@ -15,6 +16,8 @@ init
 	gameState = GameState.SETTINGS
 	controller = new RoundController()
 	startEntityLoop()
+	SetPlayerState(RABBITS_PLAYER, PLAYER_STATE_GIVES_BOUNTY, 1)
+	SetPlayerState(SHEEP_PLAYER, PLAYER_STATE_GIVES_BOUNTY, 1)
 	doAfter(1) ->
 		initializeTeams()
 		controller.start()
