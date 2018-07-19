@@ -38,7 +38,6 @@ public class Game
         spawnBuildings(Team.SHEEP)
         spawnHeroes(Team.RABBITS)
         spawnHeroes(Team.SHEEP)
-        spawnHero(Player(6), Team.SHEEP, randomHeroId())
         // Start checking for win condition
         doPeriodically(WIN_CONDITION_FREQUENCY) cb ->
             if gameState != GameState.PLAYING

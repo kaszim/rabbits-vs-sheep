@@ -11,6 +11,23 @@ import Assets
 Game game
 Scoreboard sb
 
+
+function initScoreboard()
+	sb = new Scoreboard(Team.RABBITS.getPlayers().size(), Team.SHEEP.getPlayers().size(), 1)
+	sb.setTeamRow(0, "|c00EEEE00" + Team.RABBITS.toString(), Icons.bTNCritterRabbit)
+	sb.setTeamRow(1, "|c00EEEE00" + Team.SHEEP.toString(), Icons.bTNSheep)
+	game.registerOnRoundPrepare() ->
+		sb.setHeroes(Team.RABBITS.toInt(), game.getHeroes(Team.RABBITS))
+		sb.setHeroes(Team.SHEEP.toInt(), game.getHeroes(Team.SHEEP))
+	doPeriodically(0.1) cb ->
+		for p in Team.RABBITS.getPlayers()
+			sb.setData(p.getId() + 1, 1, "|c00EE1000Kills: " + p.getGold().toString())
+		var i = 0
+		for p in Team.SHEEP.getPlayers()
+			sb.setData(Team.RABBITS.getPlayers().size() + 2 + i, 1, "|c00EE1000Kills: " + p.getGold().toString())
+			i++
+	sb.display()
+	
 init
 	FogMaskEnable(false)
 	FogEnable(false)
@@ -23,12 +40,6 @@ init
 	SetPlayerState(SHEEP_PLAYER, PLAYER_STATE_GIVES_BOUNTY, 1)
 	initializeTeams()
 	doAfter(1.) ->
-		sb = new Scoreboard(Team.RABBITS.getPlayers().size(), Team.SHEEP.getPlayers().size(), 1)
-		sb.setTeamRow(0, Team.RABBITS.toString(), Icons.bTNCritterRabbit)
-		sb.setTeamRow(1, Team.SHEEP.toString(), Icons.bTNSheep)
-		game.registerOnRoundPrepare() ->
-			sb.setHeroes(Team.RABBITS.toInt(), game.getHeroes(Team.RABBITS))
-			sb.setHeroes(Team.SHEEP.toInt(), game.getHeroes(Team.SHEEP))
-		sb.display()
+		initScoreboard()
 		game.start()
 

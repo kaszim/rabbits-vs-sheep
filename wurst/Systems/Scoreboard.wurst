@@ -33,6 +33,10 @@ public class Scoreboard
             ..setIcon(getIconForHero(hero.actor.getTypeId()))
             ..setStyle(true, true)
             i++
+    
+    function setData(int row, int col, string data)
+        mb.getItem(row, col)
+        ..setValue(data)
 
     private function _setHeroes(Team t)
         skip

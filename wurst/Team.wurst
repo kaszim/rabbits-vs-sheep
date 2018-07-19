@@ -25,6 +25,7 @@ public function initializeTeams()
         var p = Player(i)
         if p.isIngame() or p.getController() == MAP_CONTROL_COMPUTER
             teamPlayers.get(Team.SHEEP).add(p)
+    teamPlayers.get(Team.SHEEP).add(Player(6))
 
 public function player.getTeam() returns Team
     if this.getId() < PLAYERS_PER_TEAM
