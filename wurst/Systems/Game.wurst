@@ -20,6 +20,8 @@ public class Game
     private LinkedList<HeroEntity> array[2] heroes
     private Creeps creeps
     private int roundsPlayed
+    
+    private LinkedList<CallbackSingle> onRoundPrepare
 
     construct()
         entities = new LinkedList<Entity>()
@@ -27,6 +29,8 @@ public class Game
         heroes[0] = new LinkedList<HeroEntity>()
         heroes[1] = new LinkedList<HeroEntity>()
         roundsPlayed = 0
+
+        onRoundPrepare = new LinkedList<CallbackSingle>()
     
     function start()
         gameState = GameState.PLAYING
@@ -41,11 +45,14 @@ public class Game
                 destroy cb
             else
                 checkWinCondition()
-        
+        onRoundPrepare.forEach(cb -> cb.call()) // Invoke onRoundPrepare
         dispatchStartTimer()
     
     function getHeroes(Team t) returns LinkedList<HeroEntity>
         return heroes[t.toInt()]
+    
+    function registerOnRoundPrepare(CallbackSingle cb)
+        onRoundPrepare.add(cb)
     
     private function dispatchStartTimer()
         let t = getTimer()
