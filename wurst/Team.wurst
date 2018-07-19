@@ -68,3 +68,6 @@ public function Team.rect() returns rect
 
 public function Team.toInt() returns int
     return this castTo int
+
+public function Team.toString() returns string
+    return this == Team.RABBITS ? "Rabbits" : "Sheep"
