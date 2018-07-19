@@ -1,4 +1,4 @@
-package RoundController
+package Game
 import Entity
 import HeroSelector
 import Creeps
@@ -15,7 +15,7 @@ import GameState
 import TimerDialog
 
 
-public class RoundController
+public class Game
     private LinkedList<Entity> entities
     private LinkedList<Entity> array[2] heroes
     private Creeps creeps
@@ -32,16 +32,19 @@ public class RoundController
         gameState = GameState.PLAYING
         spawnBuildings(Team.RABBITS)
         spawnBuildings(Team.SHEEP)
-        for p in Team.RABBITS.getPlayers()
-            spawnHero(p, Team.RABBITS, randomHeroId())
-        for p in Team.SHEEP.getPlayers()
-            spawnHero(p, Team.SHEEP, randomHeroId())
+        spawnHeroes(Team.RABBITS)
+        spawnHeroes(Team.SHEEP)
         spawnHero(Player(6), Team.SHEEP, randomHeroId())
+        // Start checking for win condition
         doPeriodically(0.1) cb ->
             if gameState != GameState.PLAYING
                 destroy cb
             else
                 checkWinCondition()
+        
+        dispatchStartTimer()
+    
+    private function dispatchStartTimer()
         let t = getTimer()
         let d = t.createTimerDialog()
         d.setTitle("Round starts in")
@@ -52,6 +55,10 @@ public class RoundController
             t.release()
             creeps.add(Team.RABBITS, Team.SHEEP.rect().getCenter())
             creeps.add(Team.SHEEP, Team.RABBITS.rect().getCenter())
+    
+    private function spawnHeroes(Team t)
+        for p in t.getPlayers()
+            spawnHero(p, t, randomHeroId())
     
     private function checkWinCondition()
         if creeps.getCreepCount(Team.RABBITS) > MAX_CREEP

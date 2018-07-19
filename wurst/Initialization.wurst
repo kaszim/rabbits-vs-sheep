@@ -2,11 +2,11 @@ package Initialization
 import EntityManagement
 import ClosureTimers
 import GameState
-import RoundController
+import Game
 import Team
 import Config
 
-RoundController controller
+Game game
 
 init
 	FogMaskEnable(false)
@@ -14,11 +14,11 @@ init
 	SetCameraField(CAMERA_FIELD_TARGET_DISTANCE, 2400, 0.00)
 	SetCameraField(CAMERA_FIELD_FARZ, 100000000.00, 0)
 	gameState = GameState.SETTINGS
-	controller = new RoundController()
+	game = new Game()
 	startEntityLoop()
 	SetPlayerState(RABBITS_PLAYER, PLAYER_STATE_GIVES_BOUNTY, 1)
 	SetPlayerState(SHEEP_PLAYER, PLAYER_STATE_GIVES_BOUNTY, 1)
 	doAfter(1) ->
 		initializeTeams()
-		controller.start()
+		game.start()
 
