@@ -3,6 +3,8 @@ import ObjectIdGenerator
 import UnitObjEditing
 import EntityManagement
 import Team
+import Effect
+import Assets
 
 constant RABBIT = compiletime(UNIT_ID_GEN.next())
 constant SHEEP = compiletime(UNIT_ID_GEN.next())
@@ -21,7 +23,7 @@ constant SHEEP = compiletime(UNIT_ID_GEN.next())
 	this
 	..setHitPointsMaximumBase(100)
 	..setDeathType(3) // Can Raise, Does Decay
-	..setDefenseBase(2)
+	..setDefenseBase(3)
 	..setNormalAbilities("")
 	..setAttack1CooldownTime(1.35)
 	..setAttack1DamageBase(11)
@@ -46,6 +48,7 @@ public class Creep extends UnitEntity
 		team = t
 
 	ondestroy
+		flashEffect(Objects.humanLargeDeathExplode, this.pos)
 		print("Destroyed")
 
 	function getTeam() returns Team
