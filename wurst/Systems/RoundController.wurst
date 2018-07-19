@@ -9,6 +9,7 @@ import FountainOfLife
 import FountainOfMana
 import GoblinMerchant
 import MarketPlace
+import Config
 
 
 public class RoundController
@@ -42,8 +43,13 @@ public class RoundController
         creeps.clear()
         
     private function spawnBuildings(Team team)
-        entities.add(new FountainOfLife(DUMMY_PLAYER, team.rect().getLeftTop().add(256, -384)))
-        entities.add(new FountainOfMana(DUMMY_PLAYER, team.rect().getRightBot().add(-384, 384)))
-        entities.add(new GoblinMerchant(DUMMY_PLAYER, team.rect().getRightTop().add(-384, -384)))
-        entities.add(new MarketPlace(DUMMY_PLAYER, team.rect().getLeftBot().add(256, 384)))
+        var map = new LinkedList<int>()
+        for i = 0 to 3
+            map.add(i)
+        map.shuffle()
+        let pos = [team.rect().getLeftTop(), team.rect().getRightBot(), team.rect().getRightTop(), team.rect().getLeftBot()]
+        entities.add(new FountainOfLife(DUMMY_PLAYER, pos[map.get(0)].add(BUILDING_OFFSETS[map.get(0)])))
+        entities.add(new FountainOfMana(DUMMY_PLAYER, pos[map.get(1)].add(BUILDING_OFFSETS[map.get(1)])))
+        entities.add(new GoblinMerchant(DUMMY_PLAYER, pos[map.get(2)].add(BUILDING_OFFSETS[map.get(2)])))
+        entities.add(new MarketPlace(DUMMY_PLAYER, pos[map.get(3)].add(BUILDING_OFFSETS[map.get(3)])))
         
