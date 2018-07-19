@@ -5,6 +5,7 @@ public class HeroEntity extends UnitEntity
 
     construct(player p, vec2 pos, int id)
         super(createUnit(p, id, pos, angle(0)))
+		sleeps = false
 
     ondestroy
         print("Hero Destroyed")
