@@ -4,8 +4,8 @@ import EntityManagement
 public class HeroEntity extends UnitEntity
 
     construct(player p, vec2 pos, int id)
-        super(createUnit(p, id, pos, angle(0)))
-		sleeps = false
+        super(createUnitZ(p, id, pos.toVec3(), angle(0)))
+        sleeps = false
 
     ondestroy
         print("Hero Destroyed")
