@@ -46,3 +46,6 @@ public function Team.rect() returns rect
     if this == Team.RABBITS
         return RECT_RABBITS
     return RECT_SHEEP
+
+public function Team.toInt() returns int
+    return this castTo int

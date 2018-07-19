@@ -12,14 +12,14 @@ public class Creeps
     private int array[2] creepCount
 
     construct()
-        creepCount[Team.RABBITS castTo int] = 0 // number of creeps the rabbits own
-        creepCount[Team.SHEEP castTo int] = 0
+        creepCount[Team.RABBITS.toInt()] = 0 // number of creeps the rabbits own
+        creepCount[Team.SHEEP.toInt()] = 0
         // so text is number of creeps rabbits own => display on sheep side
         var text = createFText(Team.SHEEP.rect().getCenter().toVec3(), "0", CREEP_COUNT_TEXT_SIZE, 0., ZERO2, colorA(0, 255, 0, 255))
         var text2 = createFText(Team.RABBITS.rect().getCenter().toVec3(), "0", CREEP_COUNT_TEXT_SIZE, 0., ZERO2, colorA(0, 255, 0, 255))
         doPeriodically(0.1) cb ->
-            let rabbits = creepCount[Team.RABBITS castTo int]
-            let sheep = creepCount[Team.SHEEP castTo int]
+            let rabbits = creepCount[Team.RABBITS.toInt()]
+            let sheep = creepCount[Team.SHEEP.toInt()]
             let k = 255/MAX_CREEP
             text.tt
             ..setText(rabbits.toString(), CREEP_COUNT_TEXT_SIZE)
@@ -29,21 +29,21 @@ public class Creeps
             ..setColor((sheep*k).toInt(), 255-(sheep*k).toInt(), 0, 255)
     
     function getCreepCount(Team t) returns int
-        return creepCount[t castTo int]
+        return creepCount[t.toInt()]
 
     function add(Team t)
         let creep = new Creep(t.oppositeTeam().rect().getCenter(), t)
         EventListener.add(creep.actor, EVENT_PLAYER_UNIT_DEATH) ->
             onCreepDeath(creep)
-        creepCount[creep.getTeam() castTo int]++
+        creepCount[creep.getTeam().toInt()]++
     
     function clear()
-        creepCount[Team.RABBITS castTo int] = 0
-        creepCount[Team.SHEEP castTo int] = 0
+        creepCount[0] = 0
+        creepCount[1] = 0
 
     private function onCreepDeath(Creep creep)
         if gameState == GameState.PLAYING
             add(creep.getTeam().oppositeTeam())
             add(creep.getTeam().oppositeTeam())
-        creepCount[creep.getTeam() castTo int]--
+        creepCount[creep.getTeam().toInt()]--
         destroy creep

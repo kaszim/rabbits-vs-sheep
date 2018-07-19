@@ -47,20 +47,20 @@ public class RoundController
             teamWin(Team.RABBITS)
         else if creeps.getCreepCount(Team.SHEEP) > MAX_CREEP
             teamWin(Team.SHEEP)
-        else if heroes[Team.RABBITS castTo int].size() <= 0
+        else if heroes[Team.RABBITS.toInt()].size() <= 0
             teamWin(Team.SHEEP) 
-        else if heroes[Team.SHEEP castTo int].size() <= 0
+        else if heroes[Team.SHEEP.toInt()].size() <= 0
             teamWin(Team.RABBITS) 
     
     private function teamWin(Team t)
-        print("Won: " + (t castTo int).toString())
+        print("Won: " + (t.toInt()).toString())
         gameState = GameState.INBETWEEN
     
     private function spawnHero(player p, Team t, int id) returns Entity
         let hero = new HeroEntity(p, t.rect().getCenter(), id)
-        heroes[t castTo int].add(hero)
+        heroes[t.toInt()].add(hero)
         EventListener.add(hero.actor, EVENT_PLAYER_UNIT_DEATH) ->
-            heroes[t castTo int].remove(hero)
+            heroes[t.toInt()].remove(hero)
             destroy hero
         return hero 
     
