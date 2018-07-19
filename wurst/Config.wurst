@@ -12,4 +12,7 @@ public int MAX_CREEP = 300
 public int WINS_NEEDED = 5
 public constant BUILDING_OFFSETS = [vec2(256, -384), vec2(-384, 384), vec2(-384, -384), vec2(256, 384)]
 
+// Timer configuration
 public constant ROUND_PREPERATION_TIME = 20.
+public constant WIN_CONDITION_FREQUENCY = 0.1
+public constant TIME_BETWEEN_ROUNDS = 5.
