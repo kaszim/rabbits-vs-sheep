@@ -5,8 +5,11 @@ import GameState
 import Game
 import Team
 import Config
+import Scoreboard
+import Assets
 
 Game game
+Scoreboard sb
 
 init
 	FogMaskEnable(false)
@@ -18,7 +21,12 @@ init
 	startEntityLoop()
 	SetPlayerState(RABBITS_PLAYER, PLAYER_STATE_GIVES_BOUNTY, 1)
 	SetPlayerState(SHEEP_PLAYER, PLAYER_STATE_GIVES_BOUNTY, 1)
-	doAfter(1) ->
-		initializeTeams()
+	initializeTeams()
+	doAfter(1.) ->
+		sb = new Scoreboard(Team.RABBITS.getPlayers().size(), Team.SHEEP.getPlayers().size(), 1)
+		sb.setTeamRow(0, Team.RABBITS.toString(), Icons.bTNCritterRabbit)
+		sb.setTeamRow(1, Team.SHEEP.toString(), Icons.bTNSheep)
 		game.start()
+		sb.setHeroes(0, game.getHeroes(Team.RABBITS))
+		sb.display()
 

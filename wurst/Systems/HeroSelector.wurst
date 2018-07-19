@@ -1,7 +1,0 @@
-package HeroSelector
-import HerO
-
-constant HERO_IDS = [HERO_ID, 'Hblm']
-
-public function randomHeroId() returns int
-    return HERO_IDS[GetRandomInt(0, 1)]

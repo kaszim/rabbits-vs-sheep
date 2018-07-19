@@ -1,0 +1,22 @@
+package Heroes
+import HashMap
+import HerO
+import Assets
+
+constant HERO_IDS = [HERO_ID, 'Hblm']
+
+HashMap<int, string> ID_TO_ICON
+
+init
+    ID_TO_ICON = new HashMap<int, string>()
+    ID_TO_ICON.put(HERO_ID, Icons.bTNHeroAlchemist)
+    ID_TO_ICON.put('Hblm', Icons.bTNHeroArchMage)
+
+public function randomHeroId() returns int
+    return HERO_IDS[GetRandomInt(0, 1)]
+
+public function getIconForHero(int id) returns string
+    if ID_TO_ICON.hasInt(id)
+        return ID_TO_ICON.get(id)
+    else
+        return Icons.bTNCommand

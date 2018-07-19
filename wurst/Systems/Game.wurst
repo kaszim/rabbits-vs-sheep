@@ -1,6 +1,6 @@
 package Game
 import Entity
-import HeroSelector
+import Heroes
 import Creeps
 import Team
 import HeroEntity
@@ -17,15 +17,15 @@ import TimerDialog
 
 public class Game
     private LinkedList<Entity> entities
-    private LinkedList<Entity> array[2] heroes
+    private LinkedList<HeroEntity> array[2] heroes
     private Creeps creeps
     private int roundsPlayed
 
     construct()
         entities = new LinkedList<Entity>()
         creeps = new Creeps()
-        heroes[0] = new LinkedList<Entity>()
-        heroes[1] = new LinkedList<Entity>()
+        heroes[0] = new LinkedList<HeroEntity>()
+        heroes[1] = new LinkedList<HeroEntity>()
         roundsPlayed = 0
     
     function start()
@@ -43,6 +43,9 @@ public class Game
                 checkWinCondition()
         
         dispatchStartTimer()
+    
+    function getHeroes(Team t) returns LinkedList<HeroEntity>
+        return heroes[t.toInt()]
     
     private function dispatchStartTimer()
         let t = getTimer()

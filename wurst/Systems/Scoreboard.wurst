@@ -1,0 +1,41 @@
+package Scoreboard
+import LinkedList
+import HeroEntity
+import Team
+import Heroes
+
+public class Scoreboard
+    private multiboard mb
+    private int team0Rows
+    private int team1Rows
+
+    construct(int team0Players, int team1Players, int dataColumns)
+        team0Rows = team0Players
+        team1Rows = team1Players
+        mb = CreateMultiboard()
+        mb.setColumnCount(1 + dataColumns)
+        mb.setRowCount(2 + team0Players + team1Players) // 1 Team0 title, 1 Team1 title
+        mb.setItemsStyle(true, false)
+        mb.setItemsWidth(0.08)
+        mb.setTitle("Scoreboard")
+    
+    function setTeamRow(int team, string name, string icon)
+        mb.getItem(team+team*team0Rows, 0)
+            ..setValue(name)
+            ..setIcon(icon)
+            ..setStyle(true, true)
+    
+    function setHeroes(int team, LinkedList<HeroEntity> heroes)
+        var i = 0
+        for hero in heroes
+            mb.getItem(1+team+team*team0Rows+i, 0)
+            ..setValue(hero.actor.getOwner().getNameColored())
+            ..setIcon(getIconForHero(hero.actor.getTypeId()))
+            ..setStyle(true, true)
+            i++
+
+    private function _setHeroes(Team t)
+        skip
+
+    function display()
+        mb.display(true)
