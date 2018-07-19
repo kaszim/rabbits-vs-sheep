@@ -12,26 +12,57 @@ import MarketPlace
 import Config
 import ClosureTimers
 import ClosureForGroups
+import GameState
 
 
 public class RoundController
     private LinkedList<Entity> entities
+    private LinkedList<Entity> array[2] heroes
     private Creeps creeps
 
     construct()
         entities = new LinkedList<Entity>()
         creeps = new Creeps()
+        heroes[0] = new LinkedList<Entity>()
+        heroes[1] = new LinkedList<Entity>()
     
     function start()
         spawnBuildings(Team.RABBITS)
         spawnBuildings(Team.SHEEP)
         for p in Team.RABBITS.getPlayers()
-            new HeroEntity(p, Team.RABBITS.rect().getCenter(), randomHeroId())
+            spawnHero(p, Team.RABBITS, randomHeroId())
         for p in Team.SHEEP.getPlayers()
-            new HeroEntity(p, Team.SHEEP.rect().getCenter(), randomHeroId())
+            spawnHero(p, Team.SHEEP, randomHeroId())
         creeps.add(Team.SHEEP)
         creeps.add(Team.RABBITS)
-        new HeroEntity(Player(6), Team.SHEEP.rect().getCenter(), randomHeroId())
+        spawnHero(Player(6), Team.SHEEP, randomHeroId())
+        doPeriodically(0.1) cb ->
+            if gameState != GameState.PLAYING
+                destroy cb
+            else
+                checkWinCondition()
+    
+    private function checkWinCondition()
+        if creeps.getCreepCount(Team.RABBITS) > MAX_CREEP
+            teamWin(Team.RABBITS)
+        else if creeps.getCreepCount(Team.SHEEP) > MAX_CREEP
+            teamWin(Team.SHEEP)
+        else if heroes[Team.RABBITS castTo int].size() <= 0
+            teamWin(Team.SHEEP) 
+        else if heroes[Team.SHEEP castTo int].size() <= 0
+            teamWin(Team.RABBITS) 
+    
+    private function teamWin(Team t)
+        print("Won: " + (t castTo int).toString())
+        gameState = GameState.INBETWEEN
+    
+    private function spawnHero(player p, Team t, int id) returns Entity
+        let hero = new HeroEntity(p, t.rect().getCenter(), id)
+        heroes[t castTo int].add(hero)
+        EventListener.add(hero.actor, EVENT_PLAYER_UNIT_DEATH) ->
+            heroes[t castTo int].remove(hero)
+            destroy hero
+        return hero 
     
     private function clearMap()
         forUnitsInRect(playableMapRect) u ->
@@ -40,6 +71,8 @@ public class RoundController
             else
                 u.remove()
         entities.clear()
+        heroes[0].clear()
+        heroes[1].clear()
         creeps.clear()
         
     private function spawnBuildings(Team team)

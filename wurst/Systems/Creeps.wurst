@@ -27,6 +27,9 @@ public class Creeps
             text2.tt
             ..setText(sheep.toString(), CREEP_COUNT_TEXT_SIZE)
             ..setColor((sheep*k).toInt(), 255-(sheep*k).toInt(), 0, 255)
+    
+    function getCreepCount(Team t) returns int
+        return creepCount[t castTo int]
 
     function add(Team t)
         let creep = new Creep(t.oppositeTeam().rect().getCenter(), t)
