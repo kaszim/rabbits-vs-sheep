@@ -41,7 +41,7 @@ function getCreep(Team t) returns int
 	return SHEEP
 
 public class Creep extends UnitEntity
-	private static SoundDefinition deathSound = new SoundDefinition(Sounds.artilleryCorpseExplodeDeath1, false)
+	private static SoundDefinition deathSound = new SoundDefinition(Sounds.artilleryCorpseExplodeDeath1, false, true)
 	private Team team
 
 	construct(vec2 pos, Team t)
