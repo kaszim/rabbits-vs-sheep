@@ -107,6 +107,8 @@ public class Game
         return hero 
     
     private function clearMap()
+        for i = 0 to 12
+            Player(i)..setGold(0)..setLumber(0)
         forUnitsInRect(playableMapRect) u ->
             if u.getEntity() != null
                 destroy u.getEntity()
