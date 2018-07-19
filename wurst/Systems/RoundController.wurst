@@ -10,6 +10,8 @@ import FountainOfMana
 import GoblinMerchant
 import MarketPlace
 import Config
+import ClosureTimers
+import ClosureForGroups
 
 
 public class RoundController
@@ -32,14 +34,12 @@ public class RoundController
         new HeroEntity(Player(6), Team.SHEEP.rect().getCenter(), randomHeroId())
     
     private function clearMap()
-        let g = GetUnitsInRectAll(playableMapRect)
-        for u in g
+        forUnitsInRect(playableMapRect) u ->
             if u.getEntity() != null
                 destroy u.getEntity()
             else
                 u.remove()
         entities.clear()
-        g.release()
         creeps.clear()
         
     private function spawnBuildings(Team team)
