@@ -10,7 +10,7 @@ HashMap<int, string> ID_TO_ICON
 init
     ID_TO_ICON = new HashMap<int, string>()
     ID_TO_ICON.put(HERO_ID, Icons.bTNHeroAlchemist)
-    ID_TO_ICON.put('Hblm', Icons.bTNHeroArchMage)
+    ID_TO_ICON.put('Hblm', Icons.bTNBLoodMage2)
 
 public function randomHeroId() returns int
     return HERO_IDS[GetRandomInt(0, 1)]
