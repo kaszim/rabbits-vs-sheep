@@ -2,11 +2,34 @@ package WreckingBall
 import ObjectIdGenerator
 import UnitObjEditing
 import Assets
+import HeroEntity
+import Team
 
 public constant WRECKING_BALL_ID = compiletime(HERO_ID_GEN.next())
 
 @compiletime function createHero()
     new HeroDefinition(WRECKING_BALL_ID, 'Nalc')
     ..setName("Wrecking Ball")
-    ..setModelFile(Abilities.ancientProtectorMissile)
+    ..setModelFile(Abilities.boatMissile)
+    ..setScalingValue(4.)
+    ..setAttacksEnabled(0)
+    ..setSpeedBase(10)
+    ..setSpeedMaximum(10)
+    ..setCanFlee(false)
 
+public class WreckingBall extends HeroEntity
+    private bool colliding
+
+    construct(player p, vec2 pos, int id)
+        super(p, pos, id)
+        colliding = false
+
+    override function update()
+        vel = actor.getFacingAngle().direction().withZ(gravity)
+        super.update()
+        if not this.owner.getEnumTeam().rect().contains(pos.toVec2())
+            if not colliding
+                actor.setFacing((actor.getFacingAngle().degrees() + 180).fromDeg())
+            colliding = true
+        else
+            colliding = false
