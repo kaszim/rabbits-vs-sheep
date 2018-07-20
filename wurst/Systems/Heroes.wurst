@@ -5,7 +5,7 @@ import WreckingBall
 import Assets
 import HeroEntity
 
-constant HERO_IDS = ['Hblm', WRECKING_BALL_ID]
+constant HERO_IDS = [WRECKING_BALL_ID, WRECKING_BALL_ID]
 
 HashMap<int, string> ID_TO_ICON
 HashMap<int, Func> ID_TO_FUNCTION
@@ -17,7 +17,7 @@ init
     //ID_TO_ICON.put(WreckingBall, Icons.bTNBLoodMage2)
 
     ID_TO_FUNCTION = new HashMap<int, Func>()
-    ID_TO_FUNCTION.put(WRECKING_BALL_ID, (p, pos, id) -> new HeroEntity(p, pos, id))
+    ID_TO_FUNCTION.put(WRECKING_BALL_ID, (p, pos, id) -> new WreckingBall(p, pos, id))
 
 public function createHeroEntity(player p, vec2 pos, int id) returns HeroEntity
     if ID_TO_FUNCTION.hasInt(id)
