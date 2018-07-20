@@ -1,0 +1,47 @@
+package CrushingWeight
+
+import Assets
+import public BuffObjEditing
+import ChannelAbilityPreset
+import RegisterEvents
+import ClosureTimers
+import ClosureForGroups
+
+constant SPELL_NAME = "Crushing Weight"
+constant BUFF_NAME = "Being crushed"
+constant BUFF_TT = "This unit is currently being crushed by a wrecking ball"
+constant SPELL_TT_NORMAL = "Because of its humongous weight, the Wrecking Ball crushes all creeps"
+constant SPELL_TT_EXTENDED = SPELL_TT_NORMAL
+
+public let SPELL_ID = compiletime(ABIL_ID_GEN.next())
+public let BUFF_OBJ = compiletime(createDummyBuffObject(BUFF_NAME, BUFF_TT,	Icons.bTNFireBolt, Abilities.curseTarget, "chest"))
+
+@compiletime function genObj()
+    new AbilityDefinitionAttributeModifierSkill(SPELL_ID)
+    ..setName(SPELL_NAME)
+    ..setTooltipLearn(SPELL_TT_NORMAL)
+    ..setTooltipLearnExtended(SPELL_TT_NORMAL)
+    ..setHotkeyLearn("E")
+    ..presetTooltipNormal((int lvl) -> SPELL_TT_NORMAL)
+    ..presetTooltipNormalExtended((int lvl) -> SPELL_TT_EXTENDED)
+    // ..presetIcon(SPELL_ICON)
+    ..presetButtonPosNormal(0, 0)
+    ..presetManaCost((int lvl) -> 0)
+    ..presetCooldown((int lvl) -> 4.)
+    ..presetAgilityBonus(lvl -> 0)
+    ..presetStrengthBonus(lvl -> 0)
+    ..presetIntelligenceBonus(lvl -> 0)
+    ..setButtonPositionNormalX(2)
+    ..setButtonPositionNormalY(2)
+    ..setButtonPositionResearchX(2)
+    ..setButtonPositionResearchY(0)
+
+init
+    registerPlayerUnitEvent(EVENT_PLAYER_HERO_SKILL, null, () -> GetLearnedSkill() == SPELL_ID) ->
+        let u = GetTriggerUnit()
+        u.addAbility(SPELL_ID)
+        doPeriodically(0.1) cb ->
+            forUnitsInRange(u.getPos(), 30) u2 ->
+                if u2 != u
+                    u.damageTarget(u2, 10)
+        print("Spell learned")

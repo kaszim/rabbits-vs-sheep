@@ -1,21 +1,25 @@
 package WreckingBall
 import ObjectIdGenerator
 import UnitObjEditing
+import HeroPreset
 import Assets
 import HeroEntity
 import Team
+import CrushingWeight
 
 public constant WRECKING_BALL_ID = compiletime(HERO_ID_GEN.next())
 
 @compiletime function createHero()
-    new HeroDefinition(WRECKING_BALL_ID, 'Nalc')
-    ..setName("Wrecking Ball")
+    new HeroPreset(WRECKING_BALL_ID, 'Nalc', "Wrecking Ball")
+    ..addProperName("Mylei Sirius")
     ..setModelFile(Abilities.boatMissile)
     ..setScalingValue(4.)
     ..setAttacksEnabled(0)
     ..setSpeedBase(10)
     ..setSpeedMaximum(10)
     ..setCanFlee(false)
+    ..addHeroAbility(SPELL_ID)
+    ..buildHero()
 
 public class WreckingBall extends HeroEntity
     private bool colliding
