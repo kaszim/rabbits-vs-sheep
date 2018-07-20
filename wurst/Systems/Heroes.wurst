@@ -1,16 +1,29 @@
 package Heroes
 import HashMap
 import HerO
+import WreckingBall
 import Assets
+import HeroEntity
 
-constant HERO_IDS = [HERO_ID, 'Hblm']
+constant HERO_IDS = ['Hblm', WRECKING_BALL_ID]
 
 HashMap<int, string> ID_TO_ICON
+HashMap<int, Func> ID_TO_FUNCTION
 
 init
     ID_TO_ICON = new HashMap<int, string>()
     ID_TO_ICON.put(HERO_ID, Icons.bTNHeroAlchemist)
     ID_TO_ICON.put('Hblm', Icons.bTNBLoodMage2)
+    //ID_TO_ICON.put(WreckingBall, Icons.bTNBLoodMage2)
+
+    ID_TO_FUNCTION = new HashMap<int, Func>()
+    ID_TO_FUNCTION.put(WRECKING_BALL_ID, (p, pos, id) -> new HeroEntity(p, pos, id))
+
+public function createHeroEntity(player p, vec2 pos, int id) returns HeroEntity
+    if ID_TO_FUNCTION.hasInt(id)
+        return ID_TO_FUNCTION.get(id).run(p, pos, id)
+    else
+        return new HeroEntity(p, pos, id)
 
 public function randomHeroId() returns int
     return HERO_IDS[GetRandomInt(0, 1)]
@@ -20,3 +33,6 @@ public function getIconForHero(int id) returns string
         return ID_TO_ICON.get(id)
     else
         return Icons.bTNCommand
+
+interface Func
+    function run(player p, vec2 pos, int id) returns HeroEntity

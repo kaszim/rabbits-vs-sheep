@@ -1,0 +1,12 @@
+package WreckingBall
+import ObjectIdGenerator
+import UnitObjEditing
+import Assets
+
+public constant WRECKING_BALL_ID = compiletime(HERO_ID_GEN.next())
+
+@compiletime function createHero()
+    new HeroDefinition(WRECKING_BALL_ID, 'Nalc')
+    ..setName("Wrecking Ball")
+    ..setModelFile(Abilities.ancientProtectorMissile)
+
