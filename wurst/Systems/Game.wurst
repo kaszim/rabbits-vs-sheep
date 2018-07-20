@@ -99,7 +99,7 @@ public class Game
         doAfter(TIME_BETWEEN_ROUNDS, () -> start())
     
     private function spawnHero(player p, Team t, int id) returns Entity
-        let hero = new HeroEntity(p, t.rect().getCenter(), id)
+        let hero = createHeroEntity(p, t.rect().getCenter(), id)
         heroes[t.toInt()].add(hero)
         EventListener.add(hero.actor, EVENT_PLAYER_UNIT_DEATH) ->
             heroes[t.toInt()].remove(hero)
