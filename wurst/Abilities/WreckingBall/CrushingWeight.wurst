@@ -41,7 +41,8 @@ init
         let u = GetTriggerUnit()
         u.addAbility(SPELL_ID)
         doPeriodically(0.1) cb ->
-            forUnitsInRange(u.getPos(), 30) u2 ->
+            let pos = u.getPos()
+            forUnitsInRange(pos, 30) u2 ->
                 if u2 != u
                     u.damageTarget(u2, 10)
-        print("Spell learned")
+                    flashEffect(Objects.critterBloodAlbatross, pos)
