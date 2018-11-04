@@ -125,8 +125,8 @@ public class Game
             map.add(i)
         map.shuffle()
         let pos = [team.rect().getLeftTop(), team.rect().getRightBot(), team.rect().getRightTop(), team.rect().getLeftBot()]
-        entities.add(new FountainOfLife(DUMMY_PLAYER, pos[map.get(0)].add(BUILDING_OFFSETS[map.get(0)])))
-        entities.add(new FountainOfMana(DUMMY_PLAYER, pos[map.get(1)].add(BUILDING_OFFSETS[map.get(1)])))
-        entities.add(new GoblinMerchant(DUMMY_PLAYER, pos[map.get(2)].add(BUILDING_OFFSETS[map.get(2)])))
-        entities.add(new MarketPlace(DUMMY_PLAYER, pos[map.get(3)].add(BUILDING_OFFSETS[map.get(3)])))
+        entities.add(new FountainOfLife(DUMMY_PLAYER, pos[map.get(0)] + BUILDING_OFFSETS[map.get(0)]))
+        entities.add(new FountainOfMana(DUMMY_PLAYER, pos[map.get(1)] + BUILDING_OFFSETS[map.get(1)]))
+        entities.add(new GoblinMerchant(DUMMY_PLAYER, pos[map.get(2)] +BUILDING_OFFSETS[map.get(2)]))
+        entities.add(new MarketPlace(DUMMY_PLAYER, pos[map.get(3)] + BUILDING_OFFSETS[map.get(3)]))
         
