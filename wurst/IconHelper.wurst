@@ -1,0 +1,15 @@
+package IconHelper
+import HashMap
+import Icons
+
+public HashMap<int, string> ID_TO_ICON = new HashMap<int, string>()
+
+init
+    ID_TO_ICON.put('Hblm', Icons.bTNBLoodMage2)
+    //ID_TO_ICON.put(WreckingBall, Icons.bTNBLoodMage2)
+
+public function unit.getIcon() returns string
+    if ID_TO_ICON.hasInt(this.getTypeId())
+        return ID_TO_ICON.get(this.getTypeId())
+    else
+        return Icons.bTNCommand
