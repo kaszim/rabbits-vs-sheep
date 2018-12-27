@@ -1,0 +1,28 @@
+package HealingSpray
+
+import public BuffObjEditing
+import AbilityTooltipGenerator
+
+constant SPELL_NAME = "Healing Spray"
+constant SPELL_HOTKEY = "Q"
+constant SPELL_TT_DESCRIPTION = "Sprays waves of healing mist that heal friendly units in a target area."
+
+public let HEALING_SPRAY_ID = compiletime(ABIL_ID_GEN.next())
+
+@compiletime function genObj()
+    new AbilityDefinitionAlchemistHealingSpray(HEALING_SPRAY_ID)
+    ..registerTooltipGenerator(new AbilityTooltipGenerator(SPELL_TT_DESCRIPTION))
+    ..tooltipStartListen()
+    ..setLevels(3)
+    ..setName(SPELL_NAME)
+    ..presetHotkey(SPELL_HOTKEY)
+    ..presetCooldown(lvl -> 3. - lvl)
+    ..presetAreaofEffect(lvl -> 225. + 25.* lvl)
+    ..presetCastRange(lvl -> 800. + 100. * lvl)
+    ..addTooltipProperty("Waves", (int lvl) -> 2 + lvl)
+    ..addTooltipProperty("Missile Count", (int lvl) -> 6.0)
+    ..addTooltipProperty("Heal Amount", (int lvl) -> 30 + 15 * lvl)
+    ..tooltipStopListen()
+    ..presetButtonPosNormal(0, 2)
+    ..presetButtonPosResearch(0, 0)
+    ..presetTargetsAllowed(lvl -> "allies,friend,self")

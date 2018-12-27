@@ -1,0 +1,21 @@
+package Alchemist
+import ObjectIdGenerator
+import UnitObjEditing
+import IconHelper
+import Icons
+import HeroContainer
+import HeroPreset
+import HealingSpray
+
+public constant HERO_ID = compiletime(HERO_ID_GEN.next())
+
+init
+    HERO_IDS.add(HERO_ID)
+    ID_TO_ICON.put(HERO_ID, Icons.bTNHeroAlchemist)
+
+@compiletime function createHero()
+    new HeroPreset(HERO_ID, 'Nalc', "Alchemist")
+    ..setHeroAbilities("")
+    ..addHeroAbility(HEALING_SPRAY_ID)
+    ..buildHeroAbilities()
+
