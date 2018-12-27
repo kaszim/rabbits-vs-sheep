@@ -58,16 +58,15 @@ public class Creep extends UnitEntity
 		super(createUnitZ(t.creepController(), getCreep(t), pos.withZ(200), angle(0)))
 		sleeps = false
 		team = t
+		EventListener.add(actor, EVENT_PLAYER_UNIT_DEATH) ->
+			flashEffect(Objects.humanLargeDeathExplode, this.pos)
+			deathSound.playOnPoint(this.pos)
+
 		doPeriodically(PATROL_TIMER) cb ->
 			if this.actor.isAlive()
 				this.actor.issuePointOrder("patrol", t.oppositeTeam().rect().randomPoint())
 			else
 				destroy cb
-
-
-	ondestroy
-		flashEffect(Objects.humanLargeDeathExplode, this.pos)
-		deathSound.playOnPoint(this.pos)
-
+	
 	function getTeam() returns Team
 		return team
