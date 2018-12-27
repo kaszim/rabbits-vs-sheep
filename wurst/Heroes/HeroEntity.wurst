@@ -1,11 +1,15 @@
 package HeroEntity
 import EntityManagement
+import IconHelper
 
 public class HeroEntity extends UnitEntity
 
-    construct(player p, vec2 pos, int id)
-        super(createUnitZ(p, id, pos.toVec3(), angle(0)))
+    construct(unit heroUnit)
+        super(heroUnit)
         sleeps = false
 
     ondestroy
         skip
+
+    function getIcon() returns string
+        return this.actor.getIcon()

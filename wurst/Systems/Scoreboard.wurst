@@ -1,8 +1,13 @@
 package Scoreboard
 import LinkedList
-import HeroEntity
-import Team
-import Heroes
+
+public class ScoreboardRow
+    string icon
+    string value
+
+    construct(string icon, string value)
+        this.icon = icon
+        this.value = value
 
 public class Scoreboard
     private multiboard mb
@@ -25,21 +30,18 @@ public class Scoreboard
             ..setIcon(icon)
             ..setStyle(true, true)
     
-    function setHeroes(int team, LinkedList<HeroEntity> heroes)
+    function setRows(int team, LinkedList<ScoreboardRow> rows)
         var i = 0
-        for hero in heroes
+        for row in rows
             mb.getItem(1+team+team*team0Rows+i, 0)
-            ..setValue(hero.actor.getOwner().getNameColored())
-            ..setIcon(getIconForHero(hero.actor.getTypeId()))
+            ..setIcon(row.icon)
+            ..setValue(row.value)
             ..setStyle(true, true)
             i++
     
     function setData(int row, int col, string data)
         mb.getItem(row, col)
         ..setValue(data)
-
-    private function _setHeroes(Team t)
-        skip
 
     function display()
         mb.display(true)

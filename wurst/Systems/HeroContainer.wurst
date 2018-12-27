@@ -1,0 +1,42 @@
+package HeroContainer
+import Entity
+import HeroEntity
+import Team
+import HashList
+
+public HashList<int> HERO_IDS = new HashList<int>()
+
+init
+    HERO_IDS.add('Hblm')
+
+public class HeroContainer
+    private LinkedList<HeroEntity> array[2] heroes
+
+    construct()
+        heroes[0] = new LinkedList<HeroEntity>()
+        heroes[1] = new LinkedList<HeroEntity>()
+
+    function getHeroesAlive(Team t) returns int
+        return heroes[t.toInt()].size()
+    
+    function getHeroes(Team t) returns LinkedList<HeroEntity>
+        return heroes[t.toInt()]
+
+    function spawnForTeam(Team t)
+        for p in t.getPlayers()
+            spawn(p, t, HERO_IDS.get(GetRandomInt(0, HERO_IDS.size())))
+
+    function clear()
+        heroes[0].clear()
+        heroes[1].clear()
+
+    private function spawn(player p, Team t, int id)
+        let heroUnit = createUnitZ(p, id, t.rect().getCenter().toVec3(), angle(0))
+        let hero = new HeroEntity(heroUnit)
+        heroes[t.toInt()].add(hero)
+        EventListener.add(hero.actor, EVENT_PLAYER_UNIT_DEATH) ->
+            heroes[t.toInt()].remove(hero)
+            destroy hero
+
+interface Func
+    function run(player p, vec2 pos, int id) returns HeroEntity

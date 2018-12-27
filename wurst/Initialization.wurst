@@ -17,8 +17,8 @@ function initScoreboard()
 	sb.setTeamRow(0, "|c00EEEE00" + Team.RABBITS.toString(), Icons.bTNCritterRabbit)
 	sb.setTeamRow(1, "|c00EEEE00" + Team.SHEEP.toString(), Icons.bTNSheep)
 	game.registerOnRoundPrepare() ->
-		sb.setHeroes(Team.RABBITS.toInt(), game.getHeroes(Team.RABBITS))
-		sb.setHeroes(Team.SHEEP.toInt(), game.getHeroes(Team.SHEEP))
+		sb.setRows(Team.RABBITS.toInt(), heroesToScoreboardRows(Team.RABBITS))
+		sb.setRows(Team.SHEEP.toInt(), heroesToScoreboardRows(Team.SHEEP))
 	doPeriodically(0.1) cb ->
 		for p in Team.RABBITS.getPlayers()
 			sb.setData(p.getId() + 1, 1, "|c00EE1000Kills: " + p.getGold().toString())
@@ -27,7 +27,13 @@ function initScoreboard()
 			sb.setData(Team.RABBITS.getPlayers().size() + 2 + i, 1, "|c00EE1000Kills: " + p.getGold().toString())
 			i++
 	sb.display()
-	
+
+function heroesToScoreboardRows(Team t) returns LinkedList<ScoreboardRow>
+	LinkedList<ScoreboardRow> rows = new LinkedList<ScoreboardRow>()
+	for hero in game.getHeroes(t)
+		rows.add(new ScoreboardRow(hero.getIcon(),  hero.actor.getOwner().getNameColored()))
+	return rows
+
 init
 	FogMaskEnable(false)
 	FogEnable(false)

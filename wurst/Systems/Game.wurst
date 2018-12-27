@@ -1,6 +1,5 @@
 package Game
 import Entity
-import Heroes
 import Creeps
 import Team
 import HeroEntity
@@ -13,12 +12,13 @@ import ClosureTimers
 import ClosureForGroups
 import GameState
 import TimerDialog
+import HeroContainer
 
 
 public class Game
     private LinkedList<Entity> entities
-    private LinkedList<HeroEntity> array[2] heroes
     private Creeps creeps
+    private HeroContainer heroes
     private int roundsPlayed
     
     private LinkedList<CallbackSingle> onRoundPrepare
@@ -26,18 +26,19 @@ public class Game
     construct()
         entities = new LinkedList<Entity>()
         creeps = new Creeps()
-        heroes[0] = new LinkedList<HeroEntity>()
-        heroes[1] = new LinkedList<HeroEntity>()
+        heroes = new HeroContainer
         roundsPlayed = 0
-
         onRoundPrepare = new LinkedList<CallbackSingle>()
+
+    function getHeroes(Team t) returns LinkedList<HeroEntity>
+        return heroes.getHeroes(t)
     
     function start()
         gameState = GameState.PLAYING
         spawnBuildings(Team.RABBITS)
         spawnBuildings(Team.SHEEP)
-        spawnHeroes(Team.RABBITS)
-        spawnHeroes(Team.SHEEP)
+        heroes.spawnForTeam(Team.RABBITS)
+        heroes.spawnForTeam(Team.SHEEP)
         // Start checking for win condition
         doPeriodically(WIN_CONDITION_FREQUENCY) cb ->
             if gameState != GameState.PLAYING
@@ -46,9 +47,6 @@ public class Game
                 checkWinCondition()
         onRoundPrepare.forEach(cb -> cb.call()) // Invoke onRoundPrepare
         dispatchStartTimer()
-    
-    function getHeroes(Team t) returns LinkedList<HeroEntity>
-        return heroes[t.toInt()]
     
     function registerOnRoundPrepare(CallbackSingle cb)
         onRoundPrepare.add(cb)
@@ -65,18 +63,14 @@ public class Game
             creeps.add(Team.RABBITS, Team.SHEEP.rect().getCenter())
             creeps.add(Team.SHEEP, Team.RABBITS.rect().getCenter())
     
-    private function spawnHeroes(Team t)
-        for p in t.getPlayers()
-            spawnHero(p, t, randomHeroId())
-    
     private function checkWinCondition()
         if creeps.getCreepCount(Team.RABBITS) > MAX_CREEP
             teamWin(Team.RABBITS)
         else if creeps.getCreepCount(Team.SHEEP) > MAX_CREEP
             teamWin(Team.SHEEP)
-        else if heroes[Team.RABBITS.toInt()].size() <= 0
+        else if heroes.getHeroesAlive(Team.RABBITS) <= 0
             teamWin(Team.SHEEP) 
-        else if heroes[Team.SHEEP.toInt()].size() <= 0
+        else if heroes.getHeroesAlive(Team.SHEEP) <= 0
             teamWin(Team.RABBITS)
     
     private function gameEnd(Team t)
@@ -98,14 +92,6 @@ public class Game
         clearMap()
         doAfter(TIME_BETWEEN_ROUNDS, () -> start())
     
-    private function spawnHero(player p, Team t, int id) returns Entity
-        let hero = createHeroEntity(p, t.rect().getCenter(), id)
-        heroes[t.toInt()].add(hero)
-        EventListener.add(hero.actor, EVENT_PLAYER_UNIT_DEATH) ->
-            heroes[t.toInt()].remove(hero)
-            destroy hero
-        return hero 
-    
     private function clearMap()
         for i = 0 to 12
             Player(i)..setGold(0)..setLumber(0)
@@ -115,8 +101,7 @@ public class Game
             else
                 u.remove()
         entities.clear()
-        heroes[0].clear()
-        heroes[1].clear()
+        heroes.clear()
         creeps.clear()
         
     private function spawnBuildings(Team team)
