@@ -7,6 +7,7 @@ import HeroContainer
 import HeroPreset
 import HealingSpray
 import AcidBomb
+import ChemicalRage
 
 public constant HERO_ID = compiletime(HERO_ID_GEN.next())
 
@@ -19,5 +20,6 @@ init
     ..setHeroAbilities("")
     ..addHeroAbility(HEALING_SPRAY_ID)
     ..addHeroAbility(ACID_BOMB_ID)
+    ..addHeroAbility(CHEMICAL_RAGE_ID)
     ..buildHeroAbilities()
 

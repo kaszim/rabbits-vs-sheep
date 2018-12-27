@@ -1,0 +1,28 @@
+package ChemicalRage
+
+import public BuffObjEditing
+import public ChannelAbilityPreset
+import CustomAbilityTooltipGenerator
+import Icons
+
+constant SPELL_NAME = "ChemicalRage"
+constant SPELL_HOTKEY = "W"
+constant SPELL_TT_DESCRIPTION = "The Alchemist causes his Ogre to enter a chemically induced rage, increasing movement rate and increasing attack rate."
+
+public let CHEMICAL_RAGE_ID = compiletime(ABIL_ID_GEN.next())
+
+@compiletime function genObj()
+    new AbilityDefinitionAlchemistChemicalRage(CHEMICAL_RAGE_ID)
+    ..registerTooltipGenerator(new CustomAbilityTooltipGenerator(SPELL_TT_DESCRIPTION))
+    ..presetIcon(Icons.bTNChemicalRage)
+    ..tooltipStartListen()
+    ..setLevels(3)
+    ..setName(SPELL_NAME)
+    ..presetHotkey(SPELL_HOTKEY)
+    ..presetCooldown(lvl -> 18. - lvl * 3.)
+    ..addTooltipProperty("Duration", (int lvl) -> 10. + 3.*lvl)
+    ..addTooltipProperty("AttackSpeedBonus", (int lvl) -> (25. + lvl*50.).toString())
+    ..tooltipStopListen()
+    ..presetDurationHero(lvl -> 10. + 3.*lvl)
+    ..presetButtonPosNormal(1, 2)
+    ..presetButtonPosResearch(1, 0)
