@@ -6,6 +6,7 @@ import Icons
 import HeroContainer
 import HeroPreset
 import HealingSpray
+import AcidBomb
 
 public constant HERO_ID = compiletime(HERO_ID_GEN.next())
 
@@ -17,5 +18,6 @@ init
     new HeroPreset(HERO_ID, 'Nalc', "Alchemist")
     ..setHeroAbilities("")
     ..addHeroAbility(HEALING_SPRAY_ID)
+    ..addHeroAbility(ACID_BOMB_ID)
     ..buildHeroAbilities()
 

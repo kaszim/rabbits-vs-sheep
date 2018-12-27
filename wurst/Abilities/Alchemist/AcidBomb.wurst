@@ -1,0 +1,31 @@
+package AcidBomb
+
+import public BuffObjEditing
+import public ChannelAbilityPreset
+import CustomAbilityTooltipGenerator
+
+constant SPELL_NAME = "Acid Bomb"
+constant SPELL_HOTKEY = "E"
+constant SPELL_TT_DESCRIPTION = "Hurls a flask of acid at a target. The flask breaks upon impact, splashing a powerful acid on nearby hostile units.|n|nDecreases armor; deals high damage over time to the primary target; deals slightly less damage over time to nearby targets."
+
+public let ACID_BOMB_ID = compiletime(ABIL_ID_GEN.next())
+
+@compiletime function genObj()
+    new AbilityDefinitionAlchemistAcidBomb(ACID_BOMB_ID)
+    ..registerTooltipGenerator(new CustomAbilityTooltipGenerator(SPELL_TT_DESCRIPTION))
+    ..tooltipStartListen()
+    ..setLevels(3)
+    ..setName(SPELL_NAME)
+    ..presetHotkey(SPELL_HOTKEY)
+    ..presetCooldown(lvl -> 15.)
+    ..addTooltipProperty("Area ofEffect", (int lvl) -> 200. + 25.* lvl)
+    ..presetCastRange(lvl -> 600. + 100. * lvl)
+    ..presetPrimaryDamage(lvl -> 20.*lvl)
+    ..presetSecondaryDamage(lvl -> 10.*lvl)
+    ..presetArmorPenalty(lvl -> 2 + lvl)
+    ..addTooltipProperty("Duration", (int lvl) -> 2 + lvl)
+    ..tooltipStopListen()
+    ..presetAreaofEffect(lvl -> 200. + 25.* lvl)
+    ..presetDurationNormal(lvl -> 5)
+    ..presetButtonPosNormal(2, 2)
+    ..presetButtonPosResearch(2, 0)
