@@ -17,7 +17,7 @@ public class Creeps
         // so text is number of creeps rabbits own => display on sheep side
         var text = createFText(Team.SHEEP.rect().getCenter().toVec3(), "0", CREEP_COUNT_TEXT_SIZE, 0., ZERO2, colorA(0, 255, 0, 255))
         var text2 = createFText(Team.RABBITS.rect().getCenter().toVec3(), "0", CREEP_COUNT_TEXT_SIZE, 0., ZERO2, colorA(0, 255, 0, 255))
-        doPeriodically(0.1) cb ->
+        doPeriodically(WIN_CONDITION_FREQUENCY) cb ->
             let rabbits = creepCount[Team.RABBITS.toInt()]
             let sheep = creepCount[Team.SHEEP.toInt()]
             let k = 255/MAX_CREEP

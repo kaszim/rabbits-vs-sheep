@@ -16,3 +16,4 @@ public constant BUILDING_OFFSETS = [vec2(384, -384), vec2(-384, 384), vec2(-384,
 public constant ROUND_PREPERATION_TIME = 20.
 public constant WIN_CONDITION_FREQUENCY = 0.1
 public constant TIME_BETWEEN_ROUNDS = 5.
+public constant PATROL_TIMER = 3.

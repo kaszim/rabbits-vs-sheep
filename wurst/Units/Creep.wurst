@@ -5,6 +5,8 @@ import EntityManagement
 import Team
 import SoundUtils
 import Assets
+import ClosureTimers
+import Config
 
 constant RABBIT = compiletime(UNIT_ID_GEN.next())
 constant SHEEP = compiletime(UNIT_ID_GEN.next())
@@ -34,7 +36,7 @@ constant SHEEP = compiletime(UNIT_ID_GEN.next())
 	..setAttack1TargetsAllowed("Ground")
 	..setAttack1WeaponType(WeaponType.Normal)
 	..setAttacksEnabled(1)
-	..setAcquisitionRange(3000.)
+	..setAcquisitionRange(500.)
 	..setLevel(2)
 	..setGoldBountyAwardedBase(90)
 	..setGoldBountyAwardedNumberofDice(6)
@@ -56,6 +58,12 @@ public class Creep extends UnitEntity
 		super(createUnitZ(t.creepController(), getCreep(t), pos.withZ(200), angle(0)))
 		sleeps = false
 		team = t
+		doPeriodically(PATROL_TIMER) cb ->
+			if this.actor.isAlive()
+				this.actor.issuePointOrder("patrol", t.oppositeTeam().rect().randomPoint())
+			else
+				destroy cb
+
 
 	ondestroy
 		flashEffect(Objects.humanLargeDeathExplode, this.pos)
