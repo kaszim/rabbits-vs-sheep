@@ -1,0 +1,23 @@
+package CustomAbilityTooltipGenerator
+
+import AbilityTooltipGenerator
+
+public class CustomAbilityTooltipGenerator extends AbilityTooltipGenerator
+
+    construct(string description)
+        super(description)
+
+    override function addProperty(string title, StringLevelClosure lc)
+        if title.length() > 0
+            var newTitle = ""
+            var last = 0
+            for i = 1 to title.length()-1
+                if title.charAt(i).isUpper() and not title.charAt(i).isWhitespace()
+                    newTitle += title.substring(last, i) + " "
+                    last = i
+            newTitle += title.substring(last, title.length())
+            super.addProperty(newTitle, lc)
+        else
+            super.addProperty(title, lc)
+
+            
