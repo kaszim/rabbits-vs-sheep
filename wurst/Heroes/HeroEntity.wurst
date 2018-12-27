@@ -4,8 +4,8 @@ import IconHelper
 
 public class HeroEntity extends UnitEntity
 
-    construct(unit heroUnit)
-        super(heroUnit)
+    construct(player p, int id, vec3 pos)
+        super(createUnitZ(p, id, pos, angle(0)))
         sleeps = false
 
     ondestroy

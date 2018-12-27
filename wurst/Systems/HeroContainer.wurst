@@ -24,19 +24,15 @@ public class HeroContainer
 
     function spawnForTeam(Team t)
         for p in t.getPlayers()
-            spawn(p, t, HERO_IDS.get(GetRandomInt(0, HERO_IDS.size())))
+            spawn(p, t, HERO_IDS.get(GetRandomInt(0, HERO_IDS.size()-1)))
 
     function clear()
         heroes[0].clear()
         heroes[1].clear()
 
     private function spawn(player p, Team t, int id)
-        let heroUnit = createUnitZ(p, id, t.rect().getCenter().toVec3(), angle(0))
-        let hero = new HeroEntity(heroUnit)
+        let hero = new HeroEntity(p, id, t.rect().getCenter().toVec3())
         heroes[t.toInt()].add(hero)
         EventListener.add(hero.actor, EVENT_PLAYER_UNIT_DEATH) ->
             heroes[t.toInt()].remove(hero)
             destroy hero
-
-interface Func
-    function run(player p, vec2 pos, int id) returns HeroEntity
