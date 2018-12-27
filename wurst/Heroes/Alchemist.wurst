@@ -1,6 +1,4 @@
 package Alchemist
-import ObjectIdGenerator
-import UnitObjEditing
 import IconHelper
 import Icons
 import HeroContainer
@@ -8,6 +6,7 @@ import HeroPreset
 import HealingSpray
 import AcidBomb
 import ChemicalRage
+import Transmute
 
 public constant HERO_ID = compiletime(HERO_ID_GEN.next())
 
@@ -21,5 +20,6 @@ init
     ..addHeroAbility(HEALING_SPRAY_ID)
     ..addHeroAbility(ACID_BOMB_ID)
     ..addHeroAbility(CHEMICAL_RAGE_ID)
+    ..addHeroAbility(TRANSMUTE_ID)
     ..buildHeroAbilities()
 

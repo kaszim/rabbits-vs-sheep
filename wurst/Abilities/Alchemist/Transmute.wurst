@@ -1,0 +1,69 @@
+package Transmute
+
+import public BuffObjEditing
+import public ChannelAbilityPreset
+import CustomAbilityTooltipGenerator
+import Icons
+import Objects
+import AbilityIds
+import ClosureEvents
+import ClosureTimers
+import ClosureForGroups
+import Abilities
+import ItemObjEditing
+
+constant SPELL_NAME = "Transmute"
+constant SPELL_HOTKEY = "R"
+constant SPELL_TT_DESCRIPTION = "Spawns a large Gold Coin that kills everything it touches, transforming it into gold which can then be picked up!"
+constant SPELL_DURATION = 25.
+
+public let TRANSMUTE_ID = compiletime(ABIL_ID_GEN.next())
+let GOLD_COIN_ID = compiletime(UNIT_ID_GEN.next())
+let GOLD_ID = compiletime(ITEM_ID_GEN.next())
+let GOLD_ABILITY_ID = compiletime(ITEM_ID_GEN.next())
+
+@compiletime function extra()
+    new AbilityDefinitionGiveGold(GOLD_ABILITY_ID)
+    ..setGoldGiven(1, 150)
+    new ItemDefinition(GOLD_ID, 'gold')
+    ..setAbilities(GOLD_ABILITY_ID.toRawCode())
+    new UnitDefinition(GOLD_COIN_ID, 'ntor')
+    ..setName("Gold Coin")
+    ..setModelFile(Objects.potofGold)
+    ..setScalingValue(3.0)
+    ..setNormalAbilities(AbilityIds.slowAura.toRawCode()+",Atwa")
+    ..setSelectionScale(3.)
+
+@compiletime function genObj()
+    new AbilityDefinitionTaurenChieftainWarStomp(TRANSMUTE_ID)
+    ..registerTooltipGenerator(new CustomAbilityTooltipGenerator(SPELL_TT_DESCRIPTION))
+    ..presetIcon(Icons.bTNTransmute)
+    ..tooltipStartListen()
+    ..setLevels(1)
+    ..setRequiredLevel(6)
+    ..setName(SPELL_NAME)
+    ..presetHotkey(SPELL_HOTKEY)
+    ..presetCooldown(lvl -> 75.)
+    ..addTooltipProperty("Duration", (int lvl) -> SPELL_DURATION)
+    ..tooltipStopListen()
+    ..presetButtonPosNormal(3, 2)
+    ..presetButtonPosResearch(3, 0)
+    ..setArtCaster("")
+    ..setTargetsAllowed(1, "none")
+
+init
+    EventListener.add(EVENT_PLAYER_UNIT_SPELL_CAST) ->
+        let spellId = GetSpellAbilityId()
+        if spellId == TRANSMUTE_ID
+            let hero = GetSpellAbilityUnit()
+            let coin = createUnit(hero.getOwner(), GOLD_COIN_ID, hero.getPos(), hero.getFacingAngle())
+            coin.setTimedLife(SPELL_DURATION)
+            doPeriodically(0.1) cb ->
+                if coin.isAlive()
+                    forUnitsInRange(coin.getPos(), 192) u ->
+                        if u.isAlive() and not u.getOwner().isAllyOf(hero.getOwner())
+                            createItem(GOLD_ID, u.getPos())
+                            flashEffect(Abilities.pileofGold, u.getPos())
+                            u.kill()
+                else
+                    destroy cb
