@@ -14,7 +14,7 @@ import ItemObjEditing
 
 constant SPELL_NAME = "Transmute"
 constant SPELL_HOTKEY = "R"
-constant SPELL_TT_DESCRIPTION = "Spawns a large Gold Coin that kills everything it touches, transforming it into gold which can then be picked up!"
+constant SPELL_TT_DESCRIPTION = "Summons a large Gold Coin that kills everything it touches, transforming it into gold which can then be picked up!"
 constant SPELL_DURATION = 25.
 
 public let TRANSMUTE_ID = compiletime(ABIL_ID_GEN.next())
@@ -43,6 +43,7 @@ let GOLD_ABILITY_ID = compiletime(ITEM_ID_GEN.next())
     ..setRequiredLevel(6)
     ..setName(SPELL_NAME)
     ..presetHotkey(SPELL_HOTKEY)
+    ..addTooltipProperty("Type", (int lvl) -> "Summon")
     ..presetCooldown(lvl -> 75.)
     ..addTooltipProperty("Duration", (int lvl) -> SPELL_DURATION)
     ..tooltipStopListen()
