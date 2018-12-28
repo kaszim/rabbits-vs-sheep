@@ -1,0 +1,30 @@
+package Blizzard
+
+import public BuffObjEditing
+import public ChannelAbilityPreset
+import CustomAbilityTooltipGenerator
+
+constant SPELL_NAME = "Blizzard"
+constant SPELL_HOTKEY = "Q"
+constant SPELL_TT_DESCRIPTION = "Calls down waves of freezing ice shards that damage units in a target area."
+
+public let BLIZZARD_ID = compiletime(ABIL_ID_GEN.next())
+
+@compiletime function genObj()
+    new AbilityDefinitionArchMageBlizzard(BLIZZARD_ID)
+    ..registerTooltipGenerator(new CustomAbilityTooltipGenerator(SPELL_TT_DESCRIPTION))
+    ..tooltipStartListen()
+    ..setLevels(3)
+    ..setName(SPELL_NAME)
+    ..presetHotkey(SPELL_HOTKEY)
+    ..presetCooldown(lvl -> 15. - lvl)
+    ..presetCastRange(lvl -> 800. + 100. * lvl)
+    ..addTooltipProperty("Area ofEffect", (int lvl) -> 225. + 25.* lvl)
+    ..addTooltipProperty("Waves", (int lvl) -> 4 + 2*lvl)
+    ..addTooltipProperty("Shards", (int lvl) -> 4 + 2*lvl)
+    ..addTooltipProperty("Damage", (int lvl) -> 30 + 10 * lvl)
+    ..tooltipStopListen()
+    ..presetAreaofEffect(lvl -> 225. + 25.* lvl)
+    ..presetButtonPosNormal(0, 2)
+    ..presetButtonPosResearch(0, 0)
+    ..presetTargetsAllowed(lvl -> "enemies")

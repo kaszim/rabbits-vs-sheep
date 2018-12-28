@@ -1,0 +1,26 @@
+package BrillianceAura
+
+import public BuffObjEditing
+import public ChannelAbilityPreset
+import CustomAbilityTooltipGenerator
+
+constant SPELL_NAME = "Brilliance Aura"
+constant SPELL_HOTKEY = "E"
+constant SPELL_TT_DESCRIPTION = "Gives additional mana regeneration to nearby friendly units."
+
+public let BRILLIANCE_AURA_ID = compiletime(ABIL_ID_GEN.next())
+
+@compiletime function genObj()
+    new AbilityDefinitionArchMageBrillianceAura(BRILLIANCE_AURA_ID)
+    ..registerTooltipGenerator(new CustomAbilityTooltipGenerator(SPELL_TT_DESCRIPTION))
+    ..tooltipStartListen()
+    ..setLevels(3)
+    ..setName(SPELL_NAME)
+    ..presetHotkey(SPELL_HOTKEY)
+    ..addTooltipProperty("CastType", (int lvl) -> "Passive")
+    ..addTooltipProperty("ManaRegenerationIncrease", (int lvl) -> (75*lvl).toString()+"%")
+    ..addTooltipProperty("Area ofEffect", (int lvl) -> 900 + lvl * 150)
+    ..tooltipStopListen()
+    ..presetAreaofEffect(lvl -> 900. + lvl * 150)
+    ..presetButtonPosNormal(2, 2)
+    ..presetButtonPosResearch(2, 0)

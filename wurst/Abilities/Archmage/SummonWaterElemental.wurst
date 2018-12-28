@@ -1,0 +1,30 @@
+package SummonWaterElemental
+
+import public BuffObjEditing
+import public ChannelAbilityPreset
+import CustomAbilityTooltipGenerator
+
+constant SPELL_NAME = "Summon Water Elemental"
+constant SPELL_HOTKEY = "W"
+constant SPELL_TT_DESCRIPTION = "Summons a water elemental to attack the Archmage's enemies."
+
+public let SUMMON_WATER_ELEMENTAL_ID = compiletime(ABIL_ID_GEN.next())
+
+@compiletime function genObj()
+    new AbilityDefinitionArchMageSummonWaterElemental(SUMMON_WATER_ELEMENTAL_ID)
+    ..registerTooltipGenerator(new CustomAbilityTooltipGenerator(SPELL_TT_DESCRIPTION))
+    ..tooltipStartListen()
+    ..setLevels(3)
+    ..setName(SPELL_NAME)
+    ..presetHotkey(SPELL_HOTKEY)
+    ..presetCooldown(lvl -> 20. - lvl*3)
+    ..addTooltipProperty("Duration", (int lvl) -> 60.)
+    ..addTooltipProperty("AttackDamage", (int lvl) -> 9+10*lvl)
+    ..addTooltipProperty("HealthPoints", (int lvl) -> 125. + lvl == 3 ? 775. : 250.)
+    ..addTooltipProperty("Armor", (int lvl) -> lvl-1)
+    ..addTooltipProperty("Armor", (int lvl) -> lvl-1)
+    ..tooltipStopListen()
+    ..presetDurationNormal(lvl -> 60.)
+    ..presetDurationHero(lvl -> 60.)
+    ..presetButtonPosNormal(1, 2)
+    ..presetButtonPosResearch(1, 0)
