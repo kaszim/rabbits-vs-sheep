@@ -3,19 +3,20 @@ import IconHelper
 import Icons
 import HeroContainer
 import HeroPreset
+import UnitIds
 import HealingSpray
 import AcidBomb
 import ChemicalRage
 import Transmute
 
-public constant HERO_ID = compiletime(HERO_ID_GEN.next())
+constant HERO_ID = compiletime(HERO_ID_GEN.next())
 
 init
     HERO_IDS.add(HERO_ID)
     ID_TO_ICON.put(HERO_ID, Icons.bTNHeroAlchemist)
 
 @compiletime function createHero()
-    new HeroPreset(HERO_ID, 'Nalc', "Alchemist")
+    new HeroPreset(HERO_ID, UnitIds.alchemist, "Alchemist")
     ..setHeroAbilities("")
     ..addHeroAbility(HEALING_SPRAY_ID)
     ..addHeroAbility(ACID_BOMB_ID)
