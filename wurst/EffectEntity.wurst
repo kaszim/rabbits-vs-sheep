@@ -1,0 +1,59 @@
+package EffectEntity
+
+import Entity
+import Quaternion
+
+constant UP = vec3(0, 0, 1)
+
+public class Effect extends Entity
+    private effect eff = null
+    protected angle angle
+
+    construct(string fxpath)
+        super()
+        setFx(fxpath)
+
+    construct(string fxpath, player owner)
+        super(owner)
+        setFx(fxpath)
+
+    construct(string fxpath, player owner, vec2 pos)
+        super(owner, pos)
+        setFx(fxpath)
+
+    construct(string fxpath, player owner, vec3 pos)
+        super(owner, pos)
+        setFx(fxpath)
+
+    construct(string fxpath, player owner, vec3 pos, real scale)
+        super(owner, pos)
+        setFx(fxpath)
+        ..setScale(scale)
+
+    construct(string fxpath, player owner, vec3 pos, real scale, vec3 vel)
+        super(owner, pos, 0, vel)
+        setFx(fxpath)
+        ..setScale(scale)
+    
+    construct(string fxpath, player owner, vec3 pos, real scale, vec3 vel, angle angle)
+        super(owner, pos, 0, vel)
+        this.angle = angle
+        setFx(fxpath)
+        ..setScale(scale)
+        eff.setOrientation(this.angle.toQuat(UP))
+
+    ondestroy
+        if eff != null
+            eff.setPos(vec2(REAL_MAX, REAL_MAX)) // hide it
+            eff.destr()
+            eff = null
+        
+    override function update()
+        super.update()
+        eff.setPos(pos)
+    
+    private function setFx(string fxpath) returns effect
+        eff = addEffect(fxpath, this.getPos())
+        return eff
+        
+
