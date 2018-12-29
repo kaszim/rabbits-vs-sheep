@@ -1,0 +1,77 @@
+package WaterWave
+
+import public BuffObjEditing
+import public ChannelAbilityPreset
+import CustomAbilityTooltipGenerator
+import ClosureEvents
+import ClosureTimers
+import ClosureForGroups
+import Icons
+import FxEntity
+import Abilities
+import EffectEntity
+import Doodads
+import HashSet
+
+constant SPELL_NAME = "WaterWave"
+constant SPELL_HOTKEY = "R"
+constant SPELL_TT_DESCRIPTION = "Summons a wave of water that washes everything."
+constant SPELL_ICON = Icons.bTNCrushingWave
+constant SPELL_MISSILE_ART = Doodads.waterfall
+
+public let WATER_WAVE_ID = compiletime(ABIL_ID_GEN.next())
+
+@compiletime function genObj()
+    new AbilityDefinitionDreadlordCarrionSwarm(WATER_WAVE_ID)
+    ..registerTooltipGenerator(new CustomAbilityTooltipGenerator(SPELL_TT_DESCRIPTION))
+    ..presetIcon(SPELL_ICON)
+    ..setRequiredLevel(6)
+
+    ..tooltipStartListen()
+    ..setLevels(1)
+    ..setName(SPELL_NAME)
+    ..presetHotkey(SPELL_HOTKEY)
+    ..addTooltipProperty("Type", (int lvl) -> "Area of Effect")
+    ..presetCooldown(lvl -> 1)
+    ..tooltipStopListen()
+
+    ..presetTargetsAllowed(lvl -> "none")
+    ..setMissileArt("")
+    ..presetCastRange(lvl -> 99999)
+    ..presetButtonPosNormal(3, 2)
+    ..presetButtonPosResearch(3, 0)
+
+class Wave extends Effect
+    private unit hero
+
+    construct(unit hero, vec3 pos, vec3 vel, angle angle)
+        super(SPELL_MISSILE_ART, hero.getOwner(), pos, 1, vel, angle)
+        this.hero = hero
+
+    override function update()
+        super.update()
+        forUnitsInRange(pos.toVec2(), 140) u ->
+            if u.isAlive() and not u.getOwner().isAllyOf(owner)
+                // flashEffect(Abilities.replenishManaCasterOverhead, u.getPos())
+                u.setPos(pos.toVec2())
+                if not pos.toVec2().isTerrainWalkable()
+                    hero.damageTarget(u, 9999.)
+
+        if not pos.toVec2().isTerrainWalkable()
+            print("Destroy")
+            this.terminate()
+        
+
+init
+    EventListener.add(EVENT_PLAYER_UNIT_SPELL_CAST) ->
+        let spellId = GetSpellAbilityId()
+        if spellId == WATER_WAVE_ID
+            let hero = GetSpellAbilityUnit()
+            let targetPos = getSpellTargetPos()
+            let angle = hero.getPos().angleTo(targetPos)
+            let dir = angle.toVec(1)
+            let right = angle.op_plus(angle(PIHALF)).toVec(200)
+            let vel = (dir*10).toVec3()
+            new Wave(hero, hero.getPos3Zero(), vel, angle)
+            new Wave(hero, hero.getPos3Zero() + right, vel, angle)
+            new Wave(hero, hero.getPos3Zero() - right, vel, angle)

@@ -101,7 +101,7 @@ public class Game
             else
                 u.remove()
         EnumItemsInRect(playableMapRect, null) ->
-            if GetEnumItem().isAlive()
+            if GetEnumItem().isAlive() and GetEnumItem().isVisible()
                 GetEnumItem().remove()
         forDestructablesInRect(playableMapRect) dc ->
             dc.remove()
