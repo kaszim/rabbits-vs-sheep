@@ -1,4 +1,4 @@
-package WaterWave
+package Tsunami
 
 import public BuffObjEditing
 import public ChannelAbilityPreset
@@ -15,16 +15,17 @@ import HashSet
 import Matrices
 import Creep
 
-constant SPELL_NAME = "WaterWave"
+constant SPELL_NAME = "Tsunami"
 constant SPELL_HOTKEY = "R"
-constant SPELL_TT_DESCRIPTION = "Summons a wave of water that washes everything."
+constant SPELL_TT_DESCRIPTION = "Summons a tsunami that washes away all creeps in front of the Archmage. Once the tsunami hits terrain, all creeps in it take damage."
 constant SPELL_ICON = Icons.bTNCrushingWave
 constant SPELL_MISSILE_ART = Doodads.waterfall
+constant SPELL_DAMAGE = 300.
 
-public let WATER_WAVE_ID = compiletime(ABIL_ID_GEN.next())
+public let TSUNAMI_ID = compiletime(ABIL_ID_GEN.next())
 
 @compiletime function genObj()
-    new AbilityDefinitionDreadlordCarrionSwarm(WATER_WAVE_ID)
+    new AbilityDefinitionDreadlordCarrionSwarm(TSUNAMI_ID)
     ..registerTooltipGenerator(new CustomAbilityTooltipGenerator(SPELL_TT_DESCRIPTION))
     ..presetIcon(SPELL_ICON)
     ..setRequiredLevel(6)
@@ -34,6 +35,7 @@ public let WATER_WAVE_ID = compiletime(ABIL_ID_GEN.next())
     ..setName(SPELL_NAME)
     ..presetHotkey(SPELL_HOTKEY)
     ..addTooltipProperty("Type", (int lvl) -> "Area of Effect")
+    ..addTooltipProperty("Damage", (int lvl) -> SPELL_DAMAGE)
     ..presetCooldown(lvl -> 1)
     ..tooltipStopListen()
 
@@ -57,7 +59,7 @@ class Wave extends Effect
             if u.isAlive() and not u.getOwner().isAllyOf(owner)
                 if not caught.has(u)
                     caught.add(u)
-                    flashEffect(Abilities.replenishManaCasterOverhead, u.getPos())
+                    flashEffect(Abilities.crushingWaveDamage, u.getPos())
                     u.getEntity().setVel(vel)
                     u.pause()
                     
@@ -66,14 +68,14 @@ class Wave extends Effect
                 let creep = u.getEntity() castTo Creep
                 if creep != null
                     creep.disableDeathExplosion()
-                hero.damageTarget(u, 9999.)
+                hero.damageTarget(u, SPELL_DAMAGE)
             this.terminate()
         
 
 init
     EventListener.add(EVENT_PLAYER_UNIT_SPELL_CAST) ->
         let spellId = GetSpellAbilityId()
-        if spellId == WATER_WAVE_ID
+        if spellId == TSUNAMI_ID
             let hero = GetSpellAbilityUnit()
             let targetPos = getSpellTargetPos()
             let dir = hero.getPos().normalizedPointerTo(targetPos)

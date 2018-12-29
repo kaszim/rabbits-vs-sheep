@@ -7,7 +7,7 @@ import UnitIds
 import Blizzard
 import SummonWaterElemental
 import BrillianceAura
-import WaterWave
+import Tsunami
 
 constant HERO_ID = compiletime(HERO_ID_GEN.next())
 
@@ -21,6 +21,6 @@ init
     ..addHeroAbility(BLIZZARD_ID)
     ..addHeroAbility(SUMMON_WATER_ELEMENTAL_ID)
     ..addHeroAbility(BRILLIANCE_AURA_ID)
-    ..addHeroAbility(WATER_WAVE_ID)
+    ..addHeroAbility(TSUNAMI_ID)
     ..buildHeroAbilities()
 
