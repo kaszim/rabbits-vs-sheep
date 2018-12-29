@@ -12,6 +12,8 @@ import Abilities
 import EffectEntity
 import Doodads
 import HashSet
+import Matrices
+import Creep
 
 constant SPELL_NAME = "WaterWave"
 constant SPELL_HOTKEY = "R"
@@ -43,6 +45,7 @@ public let WATER_WAVE_ID = compiletime(ABIL_ID_GEN.next())
 
 class Wave extends Effect
     private unit hero
+    private HashSet<unit> caught = new HashSet<unit>()
 
     construct(unit hero, vec3 pos, vec3 vel, angle angle)
         super(SPELL_MISSILE_ART, hero.getOwner(), pos, 1, vel, angle)
@@ -52,13 +55,18 @@ class Wave extends Effect
         super.update()
         forUnitsInRange(pos.toVec2(), 140) u ->
             if u.isAlive() and not u.getOwner().isAllyOf(owner)
-                // flashEffect(Abilities.replenishManaCasterOverhead, u.getPos())
-                u.setPos(pos.toVec2())
-                if not pos.toVec2().isTerrainWalkable()
-                    hero.damageTarget(u, 9999.)
-
+                if not caught.has(u)
+                    caught.add(u)
+                    flashEffect(Abilities.replenishManaCasterOverhead, u.getPos())
+                    u.getEntity().setVel(vel)
+                    u.pause()
+                    
         if not pos.toVec2().isTerrainWalkable()
-            print("Destroy")
+            for u in caught
+                let creep = u.getEntity() castTo Creep
+                if creep != null
+                    creep.disableDeathExplosion()
+                hero.damageTarget(u, 9999.)
             this.terminate()
         
 
@@ -68,8 +76,8 @@ init
         if spellId == WATER_WAVE_ID
             let hero = GetSpellAbilityUnit()
             let targetPos = getSpellTargetPos()
-            let angle = hero.getPos().angleTo(targetPos)
-            let dir = angle.toVec(1)
+            let dir = hero.getPos().normalizedPointerTo(targetPos)
+            let angle = dir.getAngle()
             let right = angle.op_plus(angle(PIHALF)).toVec(200)
             let vel = (dir*10).toVec3()
             new Wave(hero, hero.getPos3Zero(), vel, angle)
