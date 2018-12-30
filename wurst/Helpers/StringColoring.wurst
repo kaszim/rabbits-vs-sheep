@@ -1,0 +1,4 @@
+package StringColoring
+
+public function string.color(color c) returns string
+    return c.toColorString() + this + "|r"
