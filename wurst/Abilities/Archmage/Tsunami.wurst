@@ -3,15 +3,14 @@ package Tsunami
 import public BuffObjEditing
 import public ChannelAbilityPreset
 import CustomAbilityTooltipGenerator
-import ClosureTimers
 import ClosureForGroups
-import Icons
 import FxEntity
-import Abilities
 import EffectEntity
-import Doodads
 import HashSet
 import Creep
+import SoundUtils
+import Assets
+import ClosureTimers
 
 constant SPELL_NAME = "Tsunami"
 constant SPELL_HOTKEY = "R"
@@ -19,6 +18,10 @@ constant SPELL_TT_DESCRIPTION = "Summons a tsunami that washes away all creeps i
 constant SPELL_ICON = Icons.bTNCrushingWave
 constant SPELL_MISSILE_ART = Doodads.waterfall
 constant SPELL_DAMAGE = 300.
+constant SPELL_AREA_OF_EFFECT = 100.
+constant SPELL_CAST = new SoundDefinition(Sounds.crushingWaveCaster1, false)
+constant SPELL_SOUND = new SoundDefinition(Sounds.crushingWaveTarget1, false)
+constant SPELL_EFFECT = "wave.mdx"
 
 public let TSUNAMI_ID = compiletime(ABIL_ID_GEN.next())
 
@@ -43,9 +46,38 @@ public let TSUNAMI_ID = compiletime(ABIL_ID_GEN.next())
     ..presetButtonPosNormal(3, 2)
     ..presetButtonPosResearch(3, 0)
 
+class Tsunami
+    private LinkedList<Wave> waves = new LinkedList<Wave>()
+
+    construct(unit hero, vec2 targetPos)
+        let dir = hero.getPos().normalizedPointerTo(targetPos)
+        let angle = dir.getAngle()
+        let right = angle.op_plus(angle(PIHALF)).toVec(200)
+        let vel = (dir*10).toVec3()
+        SPELL_CAST.playOnPoint(hero.getPos3Real())
+        
+        var wave = new Wave(hero, hero.getPos3Zero(), vel, angle)
+        waves.add(wave)
+        wave.setOnTerminate() ->
+            waves.remove(wave)
+        wave = new Wave(hero, hero.getPos3Zero() + right, vel, angle)
+        wave.setOnTerminate() ->
+            waves.remove(wave)
+        wave = new Wave(hero, hero.getPos3Zero() - right, vel, angle)
+        wave.setOnTerminate() ->
+            waves.remove(wave)
+            
+        doPeriodically(0.4) cb ->
+            SPELL_SOUND.play()
+            if waves.isEmpty()
+                destroy cb
+                destroy this
+
 class Wave extends Effect
     private unit hero
     private HashSet<unit> caught = new HashSet<unit>()
+    private bool everyOther = true
+    private CallbackSingle onTerminate = null
 
     construct(unit hero, vec3 pos, vec3 vel, angle angle)
         super(SPELL_MISSILE_ART, hero.getOwner(), pos, 1, vel, angle)
@@ -53,35 +85,48 @@ class Wave extends Effect
 
     override function update()
         super.update()
-        var effectPos = getPos()
-        effectPos.x += GetRandomReal(-50,50)
-        effectPos.y += GetRandomReal(-50,50)
-        flashEffect(Abilities.crushingWaveDamage, effectPos)
-        forUnitsInRange(pos.toVec2(), 140) u ->
+
+        if everyOther
+            spellEffect(pos.toVec2(), SPELL_AREA_OF_EFFECT)
+        
+        forUnitsInRange(pos.toVec2(), SPELL_AREA_OF_EFFECT) u ->
             if u.isAlive() and not u.getOwner().isAllyOf(owner)
-                flashEffect(Abilities.crushingWaveDamage, u.getPos())
+                if everyOther
+                    spellEffect(u.getPos(), 25)
                 if not caught.has(u)
                     caught.add(u)
-                    flashEffect(Abilities.crushingWaveDamage, u.getPos())
                     u.getCreepEntity().setVel(vel)
                     u.pause()
+        
+        everyOther = not everyOther        
+        
+        for u in caught
+            if u.isAlive() and not u.getPos().isTerrainWalkable()
+                hero.damageTarget(u, SPELL_DAMAGE)
+                caught.remove(u)
                     
         if not pos.toVec2().isTerrainWalkable()
             for u in caught
-                hero.damageTarget(u, SPELL_DAMAGE)
+                if u.isAlive()
+                    u.getCreepEntity().setVel(ZERO3)
+                    u.unpause()
             this.terminate()
+    
+    override function terminate()
+        super.terminate()
+        if onTerminate != null
+            onTerminate.call()
+    
+    function setOnTerminate(CallbackSingle cb)
+        onTerminate = cb
+    
+    private function spellEffect(vec2 pos, real displacement)
+        var effectPos = pos
+        effectPos.x += GetRandomReal(-displacement, displacement)
+        effectPos.y += GetRandomReal(-displacement, displacement)
+        flashEffect(SPELL_EFFECT, effectPos)
         
 
 init
-    EventListener.add(EVENT_PLAYER_UNIT_SPELL_CAST) ->
-        let spellId = GetSpellAbilityId()
-        if spellId == TSUNAMI_ID
-            let hero = GetSpellAbilityUnit()
-            let targetPos = getSpellTargetPos()
-            let dir = hero.getPos().normalizedPointerTo(targetPos)
-            let angle = dir.getAngle()
-            let right = angle.op_plus(angle(PIHALF)).toVec(200)
-            let vel = (dir*10).toVec3()
-            new Wave(hero, hero.getPos3Zero(), vel, angle)
-            new Wave(hero, hero.getPos3Zero() + right, vel, angle)
-            new Wave(hero, hero.getPos3Zero() - right, vel, angle)
+    EventListener.onPointCast(TSUNAMI_ID) (hero, targetPos) ->
+        new Tsunami(hero, targetPos)
