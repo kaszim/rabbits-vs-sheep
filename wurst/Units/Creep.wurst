@@ -48,24 +48,23 @@ function getCreep(Team t) returns int
 		return RABBIT
 	return SHEEP
 
+public function unit.getCreepEntity() returns Creep
+	if this.getEntity() == null
+		return new Creep(this)
+	else
+		return this.getEntity() castTo Creep
+
 public class Creep extends UnitEntity
 	private static SoundDefinition deathSound = new SoundDefinition(Sounds.artilleryCorpseExplodeDeath1, false, true)
-	private Team team
-	private boolean deathExplosion = true
 
 	construct(vec2 pos, Team t)
 		super(createUnitZ(t.creepController(), getCreep(t), pos.toVec3(), angle(0)))
-		sleeps = false
-		team = t
 		//TODO: Add Creep ai
 	
+	construct(unit creep)
+		super(creep)
+
 	static function onDeath(unit creep)
 		let pos = creep.getPos()
 		flashEffect(Objects.humanLargeDeathExplode, pos)
 		deathSound.playOnPoint(pos.toVec3())
-	
-	function getTeam() returns Team
-		return team
-
-	function disableDeathExplosion()
-		deathExplosion = false
