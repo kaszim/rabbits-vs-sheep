@@ -51,7 +51,8 @@ public class Creeps
 
     private function onCreepDeath(unit creep)
         if gameState == GameState.PLAYING
-            for i = 0 to CREEP_MULTIPLIER
+            Creep.onDeath(creep)
+            for i = 1 to CREEP_MULTIPLIER
                 add(creep.getOwner().getEnumTeam().oppositeTeam())
 
         creepCount[creep.getOwner().getEnumTeam().toInt()]--

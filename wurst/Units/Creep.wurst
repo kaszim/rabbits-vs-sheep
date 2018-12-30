@@ -5,8 +5,6 @@ import EntityManagement
 import Team
 import SoundUtils
 import Assets
-import ClosureTimers
-import Config
 
 public constant RABBIT = compiletime(UNIT_ID_GEN.next())
 public constant SHEEP = compiletime(UNIT_ID_GEN.next())
@@ -59,11 +57,12 @@ public class Creep extends UnitEntity
 		super(createUnitZ(t.creepController(), getCreep(t), pos.toVec3(), angle(0)))
 		sleeps = false
 		team = t
-		EventListener.add(actor, EVENT_PLAYER_UNIT_DEATH) ->
-			if deathExplosion
-				flashEffect(Objects.humanLargeDeathExplode, this.pos)
-				deathSound.playOnPoint(this.pos)
 		//TODO: Add Creep ai
+	
+	static function onDeath(unit creep)
+		let pos = creep.getPos()
+		flashEffect(Objects.humanLargeDeathExplode, pos)
+		deathSound.playOnPoint(pos.toVec3())
 	
 	function getTeam() returns Team
 		return team
