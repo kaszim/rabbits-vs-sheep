@@ -54,24 +54,26 @@ class Tsunami
         let angle = dir.getAngle()
         let right = angle.op_plus(angle(PIHALF)).toVec(200)
         let vel = (dir*10).toVec3()
+        let wavePosition = hero.getPos3Real() + 100*dir
         SPELL_CAST.playOnPoint(hero.getPos3Real())
         
-        var wave = new Wave(hero, hero.getPos3Zero(), vel, angle)
-        waves.add(wave)
-        wave.setOnTerminate() ->
-            waves.remove(wave)
-        wave = new Wave(hero, hero.getPos3Zero() + right, vel, angle)
-        wave.setOnTerminate() ->
-            waves.remove(wave)
-        wave = new Wave(hero, hero.getPos3Zero() - right, vel, angle)
-        wave.setOnTerminate() ->
-            waves.remove(wave)
-            
-        doPeriodically(0.7) cb ->
-            SPELL_SOUND.play()
-            if waves.isEmpty()
-                destroy cb
-                destroy this
+        doAfter(0.4) ->
+            var wave = new Wave(hero, wavePosition, vel, angle)
+            waves.add(wave)
+            wave.setOnTerminate() ->
+                waves.remove(wave)
+            wave = new Wave(hero, wavePosition + right, vel, angle)
+            wave.setOnTerminate() ->
+                waves.remove(wave)
+            wave = new Wave(hero, wavePosition - right, vel, angle)
+            wave.setOnTerminate() ->
+                waves.remove(wave)
+                
+            doPeriodically(0.7) cb ->
+                SPELL_SOUND.play()
+                if waves.isEmpty()
+                    destroy cb
+                    destroy this
 
 class Wave extends Effect
     private unit hero
