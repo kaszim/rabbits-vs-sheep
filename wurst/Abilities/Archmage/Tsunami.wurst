@@ -70,10 +70,11 @@ class Tsunami
                 waves.remove(wave)
                 
             doPeriodically(0.7) cb ->
-                SPELL_SOUND.play()
                 if waves.isEmpty()
                     destroy cb
                     destroy this
+                else
+                    SPELL_SOUND.playOnPoint(waves.getFirst().getPos())                    
 
 class Wave extends Effect
     private unit hero
