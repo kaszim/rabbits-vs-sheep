@@ -13,7 +13,7 @@ import ClosureForGroups
 import GameState
 import TimerDialog
 import HeroContainer
-
+import StringColoring
 
 public class Game
     private LinkedList<Entity> entities
@@ -65,22 +65,22 @@ public class Game
     
     private function checkWinCondition()
         if creeps.getCreepCount(Team.RABBITS) > MAX_CREEP
-            teamWin(Team.RABBITS)
+            teamWin(Team.RABBITS, WinReason.CREEP_OVERFLOW)
         else if creeps.getCreepCount(Team.SHEEP) > MAX_CREEP
-            teamWin(Team.SHEEP)
+            teamWin(Team.SHEEP, WinReason.CREEP_OVERFLOW)
         else if heroes.getHeroesAlive(Team.RABBITS) <= 0
-            teamWin(Team.SHEEP) 
+            teamWin(Team.SHEEP, WinReason.HERO_KILL) 
         else if heroes.getHeroesAlive(Team.SHEEP) <= 0
-            teamWin(Team.RABBITS)
+            teamWin(Team.RABBITS, WinReason.HERO_KILL)
     
     private function gameEnd(Team t)
-        print(t.toInt().toString() + "won")
+        print(t.toString() + "won")
         gameState = GameState.END
         t.victory()
         t.oppositeTeam().defeat()
     
-    private function teamWin(Team t)
-        print("Won: " + (t.toInt()).toString())
+    private function teamWin(Team t, WinReason reason)
+        print(t.toString().color(t.creepController().getColor().toColor()) + " won " + reason.toString())
         roundsPlayed++
         t.addWin()
 
@@ -119,4 +119,16 @@ public class Game
         entities.add(new FountainOfMana(DUMMY_PLAYER, pos[map.get(1)] + BUILDING_OFFSETS[map.get(1)]))
         entities.add(new GoblinMerchant(DUMMY_PLAYER, pos[map.get(2)] +BUILDING_OFFSETS[map.get(2)]))
         entities.add(new MarketPlace(DUMMY_PLAYER, pos[map.get(3)] + BUILDING_OFFSETS[map.get(3)]))
-        
+
+enum WinReason
+    CREEP_OVERFLOW
+    HERO_KILL
+    
+function WinReason.toString() returns string
+    switch (this)
+        case CREEP_OVERFLOW
+            return "by creep overflow."
+        case HERO_KILL
+            return "as the other team has no heroes left."
+        default
+            return "somehow..."
