@@ -28,7 +28,7 @@ public function initializeTeams()
     teamPlayers.get(Team.SHEEP).add(Player(6))
 
 public function player.getEnumTeam() returns Team
-    if this.getId() < PLAYERS_PER_TEAM
+    if this.getId() <= PLAYERS_PER_TEAM
         return Team.RABBITS
     else
         return Team.SHEEP

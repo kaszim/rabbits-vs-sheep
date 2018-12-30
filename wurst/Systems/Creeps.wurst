@@ -33,20 +33,26 @@ public class Creeps
 
     function add(Team t)
         add(t, t.oppositeTeam().rect().randomPoint())
-    
+
     function add(Team t, vec2 pos)
-        let creep = new Creep(pos, t)
-        EventListener.add(creep.actor, EVENT_PLAYER_UNIT_DEATH) ->
+        let creep = createUnitZ(t.creepController(), getCreep(t), pos.toVec3(), angle(0))
+        EventListener.add(creep, EVENT_PLAYER_UNIT_DEATH) ->
             onCreepDeath(creep)
-        creepCount[creep.getTeam().toInt()]++
+        creepCount[t.toInt()]++
+    
+    function getCreep(Team t) returns int
+        if t == Team.RABBITS
+            return RABBIT
+        return SHEEP
     
     function clear()
         creepCount[0] = 0
         creepCount[1] = 0
 
-    private function onCreepDeath(Creep creep)
+    private function onCreepDeath(unit creep)
         if gameState == GameState.PLAYING
-            add(creep.getTeam().oppositeTeam())
-            add(creep.getTeam().oppositeTeam())
-        creepCount[creep.getTeam().toInt()]--
-        destroy creep
+            for i = 0 to CREEP_MULTIPLIER
+                add(creep.getOwner().getEnumTeam().oppositeTeam())
+
+        creepCount[creep.getOwner().getEnumTeam().toInt()]--
+        creep.remove()

@@ -8,8 +8,8 @@ import Assets
 import ClosureTimers
 import Config
 
-constant RABBIT = compiletime(UNIT_ID_GEN.next())
-constant SHEEP = compiletime(UNIT_ID_GEN.next())
+public constant RABBIT = compiletime(UNIT_ID_GEN.next())
+public constant SHEEP = compiletime(UNIT_ID_GEN.next())
 
 @compiletime function createRabbit()
 	new UnitDefinition(RABBIT, 'necr')
