@@ -67,7 +67,7 @@ class Tsunami
         wave.setOnTerminate() ->
             waves.remove(wave)
             
-        doPeriodically(0.4) cb ->
+        doPeriodically(0.7) cb ->
             SPELL_SOUND.play()
             if waves.isEmpty()
                 destroy cb
@@ -130,9 +130,7 @@ class Wave extends Effect
 
     private function release(unit u)
         u.getCreepEntity().setVel(ZERO3)
-        caught.remove(u)
         u.unpause()
-        
 
 init
     EventListener.onPointCast(TSUNAMI_ID) (hero, targetPos) ->
