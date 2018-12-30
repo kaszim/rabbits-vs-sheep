@@ -94,9 +94,7 @@ class Wave extends Effect
                 if everyOther
                     spellEffect(u.getPos(), 25)
                 if not caught.has(u)
-                    caught.add(u)
-                    u.getCreepEntity().setVel(vel)
-                    u.pause()
+                    catch(u)
         
         everyOther = not everyOther        
         
@@ -108,8 +106,7 @@ class Wave extends Effect
         if not pos.toVec2().isTerrainWalkable()
             for u in caught
                 if u.isAlive()
-                    u.getCreepEntity().setVel(ZERO3)
-                    u.unpause()
+                    release(u)
             this.terminate()
     
     override function terminate()
@@ -125,6 +122,16 @@ class Wave extends Effect
         effectPos.x += GetRandomReal(-displacement, displacement)
         effectPos.y += GetRandomReal(-displacement, displacement)
         flashEffect(SPELL_EFFECT, effectPos)
+    
+    private function catch(unit u)
+        caught.add(u)
+        u.getCreepEntity().setVel(vel)
+        u.pause()
+
+    private function release(unit u)
+        u.getCreepEntity().setVel(ZERO3)
+        caught.remove(u)
+        u.unpause()
         
 
 init
